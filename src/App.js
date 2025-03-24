@@ -70,6 +70,8 @@ function App() {
               )
             }
           />
+          {/* デフォルトはログイン画面へ */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>
     </Router>
