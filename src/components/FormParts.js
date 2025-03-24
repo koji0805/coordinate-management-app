@@ -10,14 +10,14 @@ export const CustomForm = ({ children, onSubmit }) => {
 export const InputText = ({ value, placeholder, name, InputType, onChange, required }) => {
     // パスワード表示制御
     const [isRevealPassword, setIsRevealPassword] = useState(false);
-    const isPassword = (InputType == "password");
+    const isPassword = (InputType === "password");
     const [inputType, setInputType] = useState(InputType ? InputType : "text");
     const togglePassword = () => {
         setIsRevealPassword((prevState) => !prevState);
         setInputType(isRevealPassword ? 'password' : 'text')
     }
     return (<div className={isPassword && "relative"}>
-        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid"} pattern={isPassword && ("[a-zA-Z0-9!-/:-@\[-`{-~]*")} />
+        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid"} pattern={isPassword && ("[a-zA-Z0-9!-/:-@[-`{-~]*")} />
         {isPassword && < span
             onClick={togglePassword}
             role="presentation"
