@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Header from "./components/Header";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
+import MyPage from "./components/MyPage";
 import apiClient from './api/client';
 
 function App() {
@@ -58,6 +59,8 @@ function App() {
           <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
           {/* アカウント作成画面 */}
           <Route path="/signup" element={<SignUpForm />} />
+          {/* マイページ */}
+          <Route path="/mypage" element={<MyPage username={username} />} />
           {/* ToDoホーム画面 */}
           <Route
             path="/home"
