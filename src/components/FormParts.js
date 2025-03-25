@@ -16,8 +16,9 @@ export const InputText = ({ value, placeholder, name, InputType, onChange, requi
         setIsRevealPassword((prevState) => !prevState);
         setInputType(isRevealPassword ? 'password' : 'text')
     }
+    // {...(isPassword ? { pattern: "[a-zA-Z0-9!-/:-@[-`{-~]*" } : {})}
     return (<div className={isPassword ? "relative" : ""}>
-        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid"} pattern={isPassword ? ("[a-zA-Z0-9!-/:-@[-`{-~]*") : ""} />
+        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid"} {...(isPassword ? { pattern: "[a-zA-Z0-9!-/:-@[-`{-~]*" } : {})} />
         {isPassword && < span
             onClick={togglePassword}
             role="presentation"
