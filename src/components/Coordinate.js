@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
+import { Link } from "react-router-dom";
 
 export default function Coordinate() {
     const { id } = useParams(); // URLの:idを取得
@@ -101,12 +102,14 @@ export default function Coordinate() {
                     {items.map((item) => {
                         return (
                             <li key={item.id} className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0" >
-                                <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
-                                    <span className="text-[100px] inline-block">
-                                        <FaImage />
-                                    </span>
-                                </p>
-                                {item.name}
+                                <Link to={"/items/" + item.id}>
+                                    <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
+                                        <span className="text-[100px] inline-block">
+                                            <FaImage />
+                                        </span>
+                                    </p>
+                                    {item.name}
+                                </Link>
                             </li>
                         );
                     })}
