@@ -4,6 +4,10 @@ import Header from "./components/Header";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import MyPage from "./components/MyPage";
+import { HomeForUser, HomeForGuest } from "./components/Home";
+import Coordinate from "./components/Coordinate";
+import CoordinateForm from "./components/CoordinateForm";
+import Items from "./components/Items";
 import apiClient from './api/client';
 
 function App() {
@@ -56,25 +60,42 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <Routes>
           {/* ログイン画面 */}
-          <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+          <Route path="/login" element={
+            isLoggedIn ? <Navigate to="/home" /> : <LoginForm onLogin={handleLogin} />
+          } />
           {/* アカウント作成画面 */}
-          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/signup" element={
+            isLoggedIn ? <Navigate to="/home" /> : <SignUpForm />
+          } />
           {/* マイページ */}
-          <Route path="/mypage" element={<MyPage username={username} />} />
+          <Route path="/mypage" element={
+            isLoggedIn ? <MyPage username={username} /> : <Navigate to="/home" />
+          } />
+          {/* コーディネート */}
+          <Route path="/coordinates/:id" element={
+            isLoggedIn ? <Coordinate /> : <Navigate to="/home" />
+          } />
+          {/* コーディネート作成 */}
+          <Route path="/coordinates/new" element={
+            isLoggedIn ? <CoordinateForm mode="new" /> : <Navigate to="/home" />
+          } />
+          {/* アイテム */}
+          <Route path="/items/:id" element={
+            isLoggedIn ? <Items /> : <Navigate to="/home" />
+          } />
+          {/* アイテム作成 */}
+          {/* <Route path="/items/new" element={
+            isLoggedIn ? <CoordinateForm mode="new" /> : <Navigate to="/home" />
+          } /> */}
           {/* ToDoホーム画面 */}
           <Route
             path="/home"
             element={
-              isLoggedIn ? (
-                // <TodoHome onLogout={handleLogout} username={username} />
-                <p>ログイン成功: {username}</p>
-              ) : (
-                <Navigate to="/login" />
-              )
+              isLoggedIn ? (<HomeForUser username={username} />) : (<HomeForGuest />)
             }
           />
           {/* デフォルトはログイン画面へ */}
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </div>
     </Router>

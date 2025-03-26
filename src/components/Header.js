@@ -1,5 +1,4 @@
 import { CustomNavLink } from "./CustomLink";
-import { NavLink } from "react-router-dom";
 const Header = ({ isLoggedIn, onLogout }) => {
 
     const ItemsForUser = () => {
