@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
+import ErrorText from "./ErrorText";
 
 export default function Items() {
     const { id } = useParams(); // URLの:idを取得
@@ -104,6 +105,7 @@ export default function Items() {
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
                 <Button>編集する</Button>
+                {deleteError && <ErrorText>{deleteError}</ErrorText>}
                 <GrayButton onClick={handleDeleteTask}>削除する</GrayButton>
             </footer>
         </div>
