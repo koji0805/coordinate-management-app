@@ -7,7 +7,7 @@ import MyPage from "./components/MyPage";
 import { HomeForUser, HomeForGuest } from "./components/Home";
 import Coordinate from "./components/Coordinate";
 import CoordinateForm from "./components/CoordinateForm";
-import Items from "./components/Items";
+import Items from "./components/Item";
 import ItemForm from "./components/ItemForm";
 import apiClient from './api/client';
 
@@ -87,6 +87,10 @@ function App() {
           {/* アイテム作成 */}
           <Route path="/items/new" element={
             isLoggedIn ? <ItemForm mode="new" /> : <Navigate to="/home" />
+          } />
+          {/* アイテム編集 */}
+          <Route path="/items/edit/:id" element={
+            isLoggedIn ? <ItemForm mode="edit" /> : <Navigate to="/home" />
           } />
           {/* ToDoホーム画面 */}
           <Route
