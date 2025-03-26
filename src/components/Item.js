@@ -76,14 +76,18 @@ export default function Items() {
      */
     const handleDeleteTask = async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-                method: 'DELETE', // HTTPメソッド
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
+            if (window.confirm(`${item.name}を削除しますか？`)) {
+                const response = await fetch(`${API_BASE_URL}/items/${id}`, {
+                    method: 'DELETE', // HTTPメソッド
+                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
+                });
 
-            if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
-            alert('アイテムが削除されました！ホーム画面を表示します');
-            navigate('/home'); // ログイン画面に遷移
+                if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+                alert('アイテムが削除されました！ホーム画面を表示します');
+                navigate('/home'); // ログイン画面に遷移
+            } else {
+                return
+            }
         } catch (err) {
             setDeleteError(err.message); // エラー内容を状態にセット
         }
