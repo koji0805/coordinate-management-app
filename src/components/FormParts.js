@@ -85,6 +85,6 @@ export const RadioButton = ({ text, name, value, checked, onChange, children, bt
     );
 }
 
-export const Textarea = ({ value, placeholder }) => {
-    return (<textarea value={value} className="w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid" placeholder={placeholder}></textarea>)
+export const Textarea = ({ value, placeholder, onChange }) => {
+    return (<textarea value={value} className="w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid" placeholder={placeholder} onChange={onChange}></textarea>)
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Button, { GrayButton } from "./Button";
 import ErrorText from "./ErrorText";
 
@@ -15,7 +16,7 @@ export default function Items() {
     // ページ遷移用
     const navigate = useNavigate();
     /**
-     * コーディネートの取得処理
+     * アイテムの取得処理
      */
     const fetchItems = useCallback(async () => {
         try {
@@ -38,26 +39,9 @@ export default function Items() {
     }, [fetchItems]);
 
     const ColorMark = ({ color }) => {
-        const colorClassName = (color) => {
-            switch (color) {
-                case "black":
-                    return ("bg-stone-950")
-                case "navy":
-                    return ("bg-blue-900")
-                case "gray":
-                    return ("bg-slate-400")
-                case "gold":
-                    return ("bg-[#e2d06e]")
-                case "yellow":
-                    return ("bg-yellow-300")
-                case "orange":
-                    return ("bg-yellow-500")
-                default:
-                    return ("bg-" + color + "-600")
-            }
-        }
+        const colorClassName = "bg-" + color;
         return (
-            <span className={"block w-[1em] h-[1em] rounded-[50%] absolute left-0 top-[50%] translate-y-[-50%] " + colorClassName(color)}></span>
+            <span className={"block w-[1em] h-[1em] rounded-[50%] absolute left-0 top-[50%] translate-y-[-50%] " + colorClassName}></span>
         )
     }
 
@@ -108,7 +92,9 @@ export default function Items() {
             <Dl dt="メモ" dd={item.memo}></Dl>
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
-                <Button>編集する</Button>
+                <Link to={"/items/edit/" + id}>
+                    <Button>編集する</Button>
+                </Link>
                 {deleteError && <ErrorText>{deleteError}</ErrorText>}
                 <GrayButton onClick={handleDeleteTask}>削除する</GrayButton>
             </footer>
