@@ -101,7 +101,7 @@ export default function Coordinate() {
                 <ul className="">
                     {items.map((item) => {
                         return (
-                            <li key={item.id} className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0" >
+                            <li key={item.id} className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0 hover:opacity-50" >
                                 <Link to={"/items/" + item.id}>
                                     <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
                                         <span className="text-[100px] inline-block">
