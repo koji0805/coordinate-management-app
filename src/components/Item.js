@@ -9,6 +9,8 @@ export default function Items() {
     const { id } = useParams(); // URLの:idを取得
     const [item, setItem] = useState([]);
     const [itemError, setItemError] = useState('');
+    const [coordinates, setCoordinates] = useState([]);
+    const [coordinatesError, setCoordinatesrror] = useState('');
     const [deleteError, setDeleteError] = useState('');
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
@@ -18,7 +20,7 @@ export default function Items() {
     /**
      * アイテムの取得処理
      */
-    const fetchItems = useCallback(async () => {
+    const fetchItem = useCallback(async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/items/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
@@ -31,12 +33,28 @@ export default function Items() {
         }
     }, [API_BASE_URL, token, id]);
 
+    const fetchCoordinates = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/items/${id}/coordinates`, {
+                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
+            });
+            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
+            const data = await response.json(); // JSON形式のデータを取得
+            setCoordinates(data); // アイテム一覧を更新
+        } catch (err) {
+            setCoordinatesrror(err.message); // エラー内容を状態にセット
+        }
+    }, [API_BASE_URL, token, id]);
+
     /**
      * 初回レンダリング時にアイテム、コーディネートを取得
      */
     useEffect(() => {
-        fetchItems();
-    }, [fetchItems]);
+        fetchItem();
+    }, [fetchItem]);
+    useEffect(() => {
+        fetchCoordinates();
+    }, [fetchCoordinates]);
 
     const ColorMark = ({ color }) => {
         const colorClassName = "bg-" + color;
@@ -90,6 +108,29 @@ export default function Items() {
             "><ColorMark color={item.color} />{item.name}</h2>
             <Dl dt="カテゴリー" dd={item.category}></Dl>
             <Dl dt="メモ" dd={item.memo}></Dl>
+
+            <h3 className="text-[20px] font-bold mt-[16px]">使用したコーディネート</h3>
+            {coordinates.length > 0 ? (
+                <ul className="flex flex-wrap">
+                    {coordinates.map((coord) => (
+                        <li
+                            key={coord.id}
+                            className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0 hover:opacity-50"
+                        >
+                            <Link to={`/coordinate/${coord.id}`}>
+                                <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
+                                    <span className="text-[100px] inline-block">
+                                        <FaImage />
+                                    </span>
+                                </p>
+                                {coord.name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>使用したコーディネートはありません</p>
+            )}
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
                 <Link to={"/items/edit/" + id}>

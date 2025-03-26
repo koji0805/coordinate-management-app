@@ -65,10 +65,12 @@ function App() {
               <>
                 {/* マイページ */}
                 < Route path="/mypage" element={<MyPage username={username} />} />
+
                 {/* コーディネート */}
-                <Route path="/coordinates/:id" element={<Coordinate />} />
+                <Route path="/coordinate/:id" element={<Coordinate />} />
                 {/* コーディネート作成 */}
-                <Route path="/coordinates/new" element={<CoordinateForm mode="new" />} />
+                <Route path="/coordinate/new" element={<CoordinateForm mode="new" />} />
+
                 {/* アイテム */}
                 <Route path="/items/:id" element={<Items />} />
                 {/* アイテム作成 */}

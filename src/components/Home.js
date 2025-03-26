@@ -86,7 +86,7 @@ export const HomeForUser = ({ username }) => {
                             <>
                                 <h3>コーディネート一覧</h3>
                                 {coordinatesError && <ErrorText>{coordinatesError}</ErrorText>}
-                                <List items={coordinates} directory="/coordinates/" date="YYYYMMDD" />
+                                <List items={coordinates} directory="/coordinate/" date="YYYYMMDD" />
                             </>
                             :
                             <>
