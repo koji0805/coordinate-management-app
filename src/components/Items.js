@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
 
@@ -7,9 +7,12 @@ export default function Items() {
     const { id } = useParams(); // URLの:idを取得
     const [item, setItem] = useState([]);
     const [itemError, setItemError] = useState('');
+    const [deleteError, setDeleteError] = useState('');
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
     const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
+    // ページ遷移用
+    const navigate = useNavigate();
     /**
      * コーディネートの取得処理
      */
@@ -18,9 +21,9 @@ export default function Items() {
             const response = await fetch(`${API_BASE_URL}/items/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
             });
-            if (!response.ok) throw new Error('タスクの取得に失敗しました'); // エラーハンドリング
+            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
             const data = await response.json(); // JSON形式のデータを取得
-            setItem(data); // タスク一覧を更新
+            setItem(data); // アイテム一覧を更新
         } catch (err) {
             setItemError(err.message); // エラー内容を状態にセット
         }
@@ -66,6 +69,25 @@ export default function Items() {
         );
     }
 
+
+    /**
+     * アイテム削除処理
+     */
+    const handleDeleteTask = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/items/${id}`, {
+                method: 'DELETE', // HTTPメソッド
+                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
+            });
+
+            if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+            alert('アイテムが削除されました！ホーム画面を表示します');
+            navigate('/home'); // ログイン画面に遷移
+        } catch (err) {
+            setDeleteError(err.message); // エラー内容を状態にセット
+        }
+    };
+
     if (itemError) return <div>エラー: {itemError.message}</div>;
 
     return (<>
@@ -82,7 +104,7 @@ export default function Items() {
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
                 <Button>編集する</Button>
-                <GrayButton>削除する</GrayButton>
+                <GrayButton onClick={handleDeleteTask}>削除する</GrayButton>
             </footer>
         </div>
     </>);
