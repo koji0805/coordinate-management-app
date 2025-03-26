@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { SmallWhiteButton, SmallButton } from "./Button";
 
-export const CustomForm = ({ children, onSubmit }) => {
-    return (<form onSubmit={onSubmit} className="max-w-[400px] m-auto mt-[40px] p-[8px]">
+export const CustomForm = ({ children, onSubmit, className }) => {
+    return (<form onSubmit={onSubmit} className={"max-w-[400px] m-auto mt-[40px] p-[8px] " + (className ? className : "")}>
         {children}
     </form>)
 }
@@ -32,3 +33,58 @@ export const InputText = ({ value, placeholder, name, InputType, onChange, requi
         </span>}
     </div >)
 };
+
+export const RadioButton = ({ text, name, value, checked, onChange, children, btnCls }) => {
+
+    const handleClick = (e) => {
+        // イベントを明示的に作成
+        const event = new Event('change', { bubbles: true });
+        Object.defineProperty(event, 'target', {
+            value: {
+                name,
+                value: value
+            }
+        });
+
+        if (onChange) {
+            onChange(event);
+        }
+    }
+
+    const ColorMark = () => {
+        const bgColor = "bg-" + value
+
+        return (
+            <p className={"w-[1em] h-[1em] rounded-[50%] absolute left-[8px] top-[50%] translate-y-[-50%] " + bgColor + (value === "white" ? " border-slate-200 border-[2px] border-solid" : "")}></p>
+        )
+    }
+    return (
+        <>
+            <label className="mr-[.5em] cursor-pointer " onClick={handleClick}>
+                <input
+                    type="radio"
+                    name={name}
+                    value={value}
+                    className={"hidden"}
+                    checked={checked}
+                    onChange={() => { }} // 空のonChangeハンドラ
+                />
+                {checked ?
+                    <SmallButton className={btnCls + (name === "color" ? " relative pl-[calc(1em_+_12px)]" : "")} type="button">
+                        {name === "color" && <ColorMark color={value} />}
+                        {text}
+                    </SmallButton>
+                    :
+                    <SmallWhiteButton className={btnCls + (name === "color" ? " relative pl-[calc(1em_+_12px)]" : "")} type="button">
+                        {name === "color" && <ColorMark color={value} />}
+                        {text}
+                    </SmallWhiteButton>
+                }
+            </label>
+        </>
+    );
+}
+
+export const Textarea = ({ value, placeholder }) => {
+    return (<textarea value={value} className="w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid" placeholder={placeholder}></textarea>)
+}
