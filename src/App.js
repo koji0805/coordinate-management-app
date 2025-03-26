@@ -60,38 +60,31 @@ function App() {
       <div>
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <Routes>
-          {/* ログイン画面 */}
-          <Route path="/login" element={
-            isLoggedIn ? <Navigate to="/home" /> : <LoginForm onLogin={handleLogin} />
-          } />
-          {/* アカウント作成画面 */}
-          <Route path="/signup" element={
-            isLoggedIn ? <Navigate to="/home" /> : <SignUpForm />
-          } />
-          {/* マイページ */}
-          <Route path="/mypage" element={
-            isLoggedIn ? <MyPage username={username} /> : <Navigate to="/home" />
-          } />
-          {/* コーディネート */}
-          <Route path="/coordinates/:id" element={
-            isLoggedIn ? <Coordinate /> : <Navigate to="/home" />
-          } />
-          {/* コーディネート作成 */}
-          <Route path="/coordinates/new" element={
-            isLoggedIn ? <CoordinateForm mode="new" /> : <Navigate to="/home" />
-          } />
-          {/* アイテム */}
-          <Route path="/items/:id" element={
-            isLoggedIn ? <Items /> : <Navigate to="/home" />
-          } />
-          {/* アイテム作成 */}
-          <Route path="/items/new" element={
-            isLoggedIn ? <ItemForm mode="new" /> : <Navigate to="/home" />
-          } />
-          {/* アイテム編集 */}
-          <Route path="/items/edit/:id" element={
-            isLoggedIn ? <ItemForm mode="edit" /> : <Navigate to="/home" />
-          } />
+          {isLoggedIn ?
+            (
+              <>
+                {/* マイページ */}
+                < Route path="/mypage" element={<MyPage username={username} />} />
+                {/* コーディネート */}
+                <Route path="/coordinates/:id" element={<Coordinate />} />
+                {/* コーディネート作成 */}
+                <Route path="/coordinates/new" element={<CoordinateForm mode="new" />} />
+                {/* アイテム */}
+                <Route path="/items/:id" element={<Items />} />
+                {/* アイテム作成 */}
+                <Route path="/items/new" element={<ItemForm mode="new" />} />
+                {/* アイテム編集 */}
+                <Route path="/items/edit/:id" element={<ItemForm mode="edit" />} />
+              </>
+            ) : (
+              <>
+                {/* アカウント作成画面 */}
+                <Route path="/signup" element={<SignUpForm />} />
+                {/* ログイン画面 */}
+                <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+              </>
+            )
+          }
           {/* ToDoホーム画面 */}
           <Route
             path="/home"
