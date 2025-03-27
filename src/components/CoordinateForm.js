@@ -1,5 +1,5 @@
 import { CustomForm, InputText, RadioButton, Textarea } from "./FormParts";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaImage } from "react-icons/fa";
 import apiClient from "../api/client";
@@ -8,7 +8,8 @@ import ErrorText from "./ErrorText";
 import Datepicker from "react-tailwindcss-datepicker";
 
 export default function ItemForm({ mode }) {
-    const today = new Date().toISOString().split("T")[0];
+    const today = useMemo(() => new Date().toISOString(), []);
+
     // フォームデータの状態管理
     const [formCoordData, setCoordFormData] = useState({
         name: '',
@@ -63,9 +64,8 @@ export default function ItemForm({ mode }) {
                 });
                 if (!response_coordinateItems.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
                 const data_coordinateItems = await response_coordinateItems.json(); // JSON形式のデータを取得
-                const data_day = convertToYYYYMMDD(data_coordinateItems[0].day) || convertToYYYYMMDD(today);
+                const data_day = data_coordinateItems[0].day || today;
                 const item_list = data_coordinateItems.map((item) => item.item_id);
-
                 setFormCoodItemData(prevData => ({
                     ...prevData,
                     "items": item_list,
@@ -109,44 +109,6 @@ export default function ItemForm({ mode }) {
     // ページ遷移用
     const navigate = useNavigate();
 
-    const convertToPythonDatetime = (dateInput) => {
-        // 様々な入力形式に対応
-        let dateString;
-        if (typeof dateInput === 'string') {
-            dateString = dateInput;
-        } else if (dateInput && dateInput.startDate) {
-            dateString = dateInput.startDate;
-        } else if (dateInput && dateInput.target && dateInput.target.value) {
-            dateString = dateInput.target.value;
-        } else {
-            throw new Error('Invalid date input');
-        }
-        // 入力が有効な YYYY-MM-DD 形式であることを確認
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        if (!regex.test(dateString)) {
-            throw new Error('Invalid date format. Use YYYY-MM-DD');
-        }
-        return `${dateString}T00:00:00.000000`;
-    };
-
-    // ISO 8601形式の日付を YYYY-MM-DD 形式に変換
-    function convertToYYYYMMDD(isoString) {
-        // 入力が有効な ISO 8601形式であることを確認
-        const date = new Date(isoString);
-
-        // 無効な日付の場合はエラーをスロー
-        if (isNaN(date.getTime())) {
-            throw new Error('Invalid ISO date string');
-        }
-
-        // UTCズレを防ぐためにローカル時間から取得する
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0');
-        const dd = String(date.getDate()).padStart(2, '0');
-
-        return `${yyyy}-${mm}-${dd}`;
-    }
-
     // 入力フィールドの値を更新
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -159,10 +121,10 @@ export default function ItemForm({ mode }) {
     // フォーム送信時の処理
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const dayToUse = formCoodItemData.day || convertToYYYYMMDD(today);
+        const dayToUse = formCoodItemData.day || today;
         const payload = {
             coordinateItems: {
-                day: convertToPythonDatetime(dayToUse) // ← ISO形式（T付き）ならそのままでOK！
+                day: dayToUse
             },
             used_items: formCoodItemData.items
         };
@@ -237,7 +199,7 @@ export default function ItemForm({ mode }) {
                         (newValue) => {
                             setFormCoodItemData(prevData => ({
                                 ...prevData,
-                                "day": convertToYYYYMMDD(newValue.startDate)
+                                "day": newValue.startDate
                             }));
                         }
                     }
