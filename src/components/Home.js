@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import List from "./List";
 import ErrorText from "./ErrorText";
 import Button from "./Button";
-import ItemFilter, { categories } from "./ItemFliter";
+import ItemFilter from "./ItemFliter";
 import { Link } from "react-router-dom";
 
 export const HomeForUser = ({ username }) => {
@@ -15,7 +15,6 @@ export const HomeForUser = ({ username }) => {
     const [coordinatesError, setCoordinatesError] = useState('');
     const [itemsError, setItemsError] = useState('');
     const [showType, setShowType] = useState('coordinate');
-    const [itemFilter, setItemFilter] = useState('all');
     // フィルタリング状態の管理
     const [selectedCategory, setSelectedCategory] = useState("すべて");
 
