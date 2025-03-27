@@ -140,9 +140,6 @@ export default function ItemForm({ mode }) {
                     },
                     used_items: formCoodItemData.items // ← item_id の配列（例: [1, 3, 5]）
                 };
-                console.log(formCoodItemData.day);
-                console.log(convertToPythonDatetime(formCoodItemData.day));
-                console.log(payload);
 
                 const response = await apiClient.post('/coordinates/', formCoordData); // バックエンドにアカウント作成リクエストを送信
                 const newCodeId = response.data.id
