@@ -1,4 +1,4 @@
-import { CustomForm, InputText, RadioButton, Textarea } from "./FormParts";
+import { CustomForm, InputText, Textarea } from "./FormParts";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaImage } from "react-icons/fa";
@@ -164,12 +164,6 @@ export default function ItemForm({ mode }) {
             }
         }
     };
-    const [selectedCategory, setSelectedCategory] = useState('obi');
-    const [selectedColor, setSelectedColor] = useState('red-600');
-
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
-    }
 
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
@@ -217,8 +211,9 @@ export default function ItemForm({ mode }) {
             </div>
             <small>使用したアイテム</small>
             <div className="mb-[28px] flex flex-wrap">
+                {itemsError && <ErrorText>{itemsError}</ErrorText>}
                 {items.map((item) => (
-                    <div className={"cursor-pointer border rounded-sm w-[120px] h-[100px] mr-[8px] nth-[3n]:mr-0 mb-[8px] p-[4px] " + (checkedItems.includes(item.id) ? "bg-sky-600 text-slate-50" : "border-sky-600")} title={item.name} key={item.id}>
+                    <div className={"cursor-pointer border rounded-sm w-[120px] h-[100px] mr-[8px] nth-[3n]:mr-0 mb-[8px] p-[4px] hover:opacity-50 " + (checkedItems.includes(item.id) ? "bg-sky-600 text-slate-50" : "border-sky-600")} title={item.name} key={item.id}>
                         <label className="">
                             <input
                                 type="checkbox"
@@ -230,7 +225,7 @@ export default function ItemForm({ mode }) {
                                 onChange={() => { handleCheckboxChange(item.id) }}
                             />
 
-                            <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
+                            <p className="cursor-pointer p-[.5em] bg-slate-400 text-center text-slate-50">
                                 <span className="text-[40px] inline-block">
                                     <FaImage />
                                 </span>
