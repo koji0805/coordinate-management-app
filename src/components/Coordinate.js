@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
-import { Link } from "react-router-dom";
+import ItemListItem from "./ListItem";
 import ErrorText from "./ErrorText";
 
 export default function Coordinate() {
@@ -130,16 +130,7 @@ export default function Coordinate() {
                 <ul className="">
                     {items.map((item) => {
                         return (
-                            <li key={item.id} className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0 hover:opacity-50" >
-                                <Link to={"/item/" + item.id}>
-                                    <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
-                                        <span className="text-[100px] inline-block">
-                                            <FaImage />
-                                        </span>
-                                    </p>
-                                    {item.name}
-                                </Link>
-                            </li>
+                            <ItemListItem item={item} to={"/item/" + item.id} key={item.id} title={item.name} />
                         );
                     })}
                 </ul>

@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import Button, { GrayButton } from "./Button";
+import ItemListItem from "./ListItem";
 import ErrorText from "./ErrorText";
 
 export default function Items() {
@@ -113,19 +113,7 @@ export default function Items() {
             {coordinates.length > 0 ? (
                 <ul className="flex flex-wrap">
                     {coordinates.map((coord) => (
-                        <li
-                            key={coord.id}
-                            className="inline-block w-[300px] mr-[1em] mb-[.5em] [&:nth-child(3n)]:mr-0 hover:opacity-50"
-                        >
-                            <Link to={`/coordinate/${coord.id}`}>
-                                <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
-                                    <span className="text-[100px] inline-block">
-                                        <FaImage />
-                                    </span>
-                                </p>
-                                {coord.name}
-                            </Link>
-                        </li>
+                        <ItemListItem item={coord.id} to={`/coordinate/${coord.id}`} title={coord.name} />
                     ))}
                 </ul>
             ) : (
