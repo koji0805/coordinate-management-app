@@ -145,7 +145,9 @@ export default function Coordinate() {
                 </ul>
             </div>
             <div className="mt-[1.5em]">
-                <Button>編集する</Button>
+                <Link to={"/coordinate/edit/" + id}>
+                    <Button>編集する</Button>
+                </Link>
                 {deleteError && <ErrorText>{deleteError}</ErrorText>}
                 <GrayButton onClick={handleDeleteCoordinate}>削除する</GrayButton>
             </div>
