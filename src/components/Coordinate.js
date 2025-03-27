@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
 import { Link } from "react-router-dom";
+import ErrorText from "./ErrorText";
 
 export default function Coordinate() {
     const { id } = useParams(); // URLの:idを取得
@@ -12,10 +13,13 @@ export default function Coordinate() {
     const [coorinateError, setCoordinateError] = useState('');
     const [coorinateItemsError, setCoordinateItemsError] = useState('');
     const [itemError, setItemError] = useState('');
+    const [deleteError, setDeleteError] = useState('');
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
     const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
-    const [isEditMode, setIsEditMode] = useState(false)
+    const [isEditMode, setIsEditMode] = useState(false);
+    // ページ遷移用
+    const navigate = useNavigate();
 
     /**
      * コーディネートの取得処理
@@ -68,6 +72,31 @@ export default function Coordinate() {
     }, [API_BASE_URL, token, id]);
 
     /**
+     * アイテム削除処理
+     */
+    const handleDeleteCoordinate = async () => {
+        try {
+            if (window.confirm(`${coorinate.name}を削除しますか？`)) {
+                const response_coordinateItems = await fetch(`${API_BASE_URL}/coordinate_items/${coorinate.id}`, {
+                    method: 'DELETE', // HTTPメソッド
+                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
+                });
+                const response_coordinates = await fetch(`${API_BASE_URL}/coordinates/${coorinate.id}`, {
+                    method: 'DELETE', // HTTPメソッド
+                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
+                });
+
+                if (!response_coordinates.ok || !response_coordinateItems.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+                alert('アイテムが削除されました！ホーム画面を表示します');
+                navigate('/home'); // ログイン画面に遷移
+            } else {
+                return
+            }
+        } catch (err) {
+            setDeleteError(err.message); // エラー内容を状態にセット
+        }
+    };
+    /**
      * 初回レンダリング時にアイテム、コーディネートを取得
      */
     useEffect(() => {
@@ -117,7 +146,8 @@ export default function Coordinate() {
             </div>
             <div className="mt-[1.5em]">
                 <Button>編集する</Button>
-                <GrayButton>削除する</GrayButton>
+                {deleteError && <ErrorText>{deleteError}</ErrorText>}
+                <GrayButton onClick={handleDeleteCoordinate}>削除する</GrayButton>
             </div>
         </div>
     </>);
