@@ -76,7 +76,7 @@ export default function Items() {
     /**
      * アイテム削除処理
      */
-    const handleDeleteTask = async () => {
+    const handleDeleteItem = async () => {
         try {
             if (window.confirm(`${item.name}を削除しますか？`)) {
                 const response = await fetch(`${API_BASE_URL}/items/${id}`, {
@@ -137,7 +137,7 @@ export default function Items() {
                     <Button>編集する</Button>
                 </Link>
                 {deleteError && <ErrorText>{deleteError}</ErrorText>}
-                <GrayButton onClick={handleDeleteTask}>削除する</GrayButton>
+                <GrayButton onClick={handleDeleteItem}>削除する</GrayButton>
             </footer>
         </div>
     </>);
