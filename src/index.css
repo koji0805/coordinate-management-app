@@ -17,3 +17,7 @@ code {
 header a.active {
   @apply underline
 } 
+
+.calendar-wrapper .opacity-1 {
+  opacity: 1;
+}

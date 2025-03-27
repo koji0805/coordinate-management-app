@@ -70,6 +70,8 @@ function App() {
                 <Route path="/coordinate/:id" element={<Coordinate />} />
                 {/* コーディネート作成 */}
                 <Route path="/coordinate/new" element={<CoordinateForm mode="new" />} />
+                {/* アイテム編集 */}
+                <Route path="/coordinate/edit/:id" element={<CoordinateForm mode="edit" />} />
 
                 {/* アイテム */}
                 <Route path="/item/:id" element={<Items />} />
