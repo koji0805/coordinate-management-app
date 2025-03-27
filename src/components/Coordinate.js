@@ -30,9 +30,9 @@ export default function Coordinate() {
             const response = await fetch(`${API_BASE_URL}/coordinates/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
             });
-            if (!response.ok) throw new Error('タスクの取得に失敗しました'); // エラーハンドリング
+            if (!response.ok) throw new Error('コーディネートの取得に失敗しました'); // エラーハンドリング
             const data = await response.json(); // JSON形式のデータを取得
-            setCoordinate(data); // タスク一覧を更新
+            setCoordinate(data); // コーディネート一覧を更新
         } catch (err) {
             setCoordinateError(err.message); // エラー内容を状態にセット
         }
@@ -46,7 +46,7 @@ export default function Coordinate() {
             const response = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
             });
-            if (!response.ok) throw new Error('タスクの取得に失敗しました'); // エラーハンドリング
+            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
             const coordinateData = await response.json();
             setCoordinateItems(coordinateData);
 
