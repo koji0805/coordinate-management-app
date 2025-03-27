@@ -114,7 +114,7 @@ export default function Items() {
             {coordinates.length > 0 ? (
                 <ul className="flex flex-wrap">
                     {coordinates.map((coord) => (
-                        <ItemListItem item={coord.id} to={`/coordinate/${coord.id}`} title={coord.name} />
+                        <ItemListItem key={coord.id} item={coord.id} to={`/coordinate/${coord.id}`} title={coord.name} />
                     ))}
                 </ul>
             ) : (
