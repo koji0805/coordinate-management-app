@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import List from "./List";
 import ErrorText from "./ErrorText";
 import Button from "./Button";
+import ItemFilter, { categories } from "./ItemFliter";
 import { Link } from "react-router-dom";
 
 export const HomeForUser = ({ username }) => {
@@ -14,6 +15,9 @@ export const HomeForUser = ({ username }) => {
     const [coordinatesError, setCoordinatesError] = useState('');
     const [itemsError, setItemsError] = useState('');
     const [showType, setShowType] = useState('coordinate');
+    const [itemFilter, setItemFilter] = useState('all');
+    // フィルタリング状態の管理
+    const [selectedCategory, setSelectedCategory] = useState("すべて");
 
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
@@ -56,15 +60,25 @@ export const HomeForUser = ({ username }) => {
      */
     useEffect(() => {
         fetchItems();
-    }, [fetchItems]);
+        fetchCoordinates();
+    }, [fetchItems, fetchCoordinates]);
 
     useEffect(() => {
-        fetchCoordinates();
-    }, [fetchCoordinates]);
+    }, [selectedCategory]);
 
     const handleShowType = (mode) => {
         mode === "coordinate" ? setShowType("coordinate") : setShowType("item")
     }
+
+    /**
+     * フィルタリング状態に応じたタスクリストを取得
+     */
+    const filteredItems = items.filter((item) => {
+        if (selectedCategory === "すべて") {
+            return true;
+        }
+        return item.category === selectedCategory;
+    });
 
     return (
         <div className="p-[1em] max-w-[calc(900px_+_4em)] m-auto">
@@ -84,15 +98,18 @@ export const HomeForUser = ({ username }) => {
                     {
                         showType === "coordinate" ?
                             <>
-                                <h3>コーディネート一覧</h3>
                                 {coordinatesError && <ErrorText>{coordinatesError}</ErrorText>}
                                 <List items={coordinates} directory="/coordinate/" date="YYYYMMDD" />
                             </>
                             :
                             <>
-                                <h3>アイテム一覧</h3>
+                                <div>
+                                    <span>カテゴリー：</span>
+                                    {/* フィルタリングボタン */}
+                                    <ItemFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+                                </div>
                                 {itemsError && <ErrorText>{itemsError}</ErrorText>}
-                                <List items={items} directory="/item/" />
+                                <List items={filteredItems} directory="/item/" />
                             </>
                     }
                 </section>
