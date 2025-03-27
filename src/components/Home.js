@@ -99,7 +99,7 @@ export const HomeForUser = ({ username }) => {
                         showType === "coordinate" ?
                             <>
                                 {coordinatesError && <ErrorText>{coordinatesError}</ErrorText>}
-                                <List items={coordinates} directory="/coordinate/" date="YYYYMMDD" />
+                                <List items={coordinates} directory="/coordinate/" date="YYYYMMDD" itemType="コーディネート" />
                             </>
                             :
                             <>
@@ -109,7 +109,7 @@ export const HomeForUser = ({ username }) => {
                                     <ItemFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
                                 </div>
                                 {itemsError && <ErrorText>{itemsError}</ErrorText>}
-                                <List items={filteredItems} directory="/item/" />
+                                <List items={filteredItems} directory="/item/" itemType="アイテム" />
                             </>
                     }
                 </section>

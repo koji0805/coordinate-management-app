@@ -129,11 +129,15 @@ export default function Coordinate() {
             <div className="mt-[.5em]">
                 <H3>使用したアイテム</H3>
                 <ul className="">
-                    {items.map((item) => {
-                        return (
-                            <ItemListItem item={item} to={"/item/" + item.id} key={item.id} title={item.name} />
-                        );
-                    })}
+                    {
+                        items.length > 0 ?
+                            items.map((item) => {
+                                return (
+                                    <ItemListItem item={item} to={"/item/" + item.id} key={item.id} title={item.name} />
+                                );
+                            }) :
+                            <p>使用したアイテムがありません。</p>
+                    }
                 </ul>
             </div>
             <div className="mt-[1.5em]">
