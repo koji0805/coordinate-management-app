@@ -111,6 +111,7 @@ export default function Items() {
             <Dl dt="メモ" dd={item.memo}></Dl>
 
             <H3>使用したコーディネート</H3>
+            {coordinatesError && <ErrorText>coordinatesError</ErrorText>}
             {coordinates.length > 0 ? (
                 <ul className="flex flex-wrap">
                     {coordinates.map((coord) => (
