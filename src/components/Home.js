@@ -13,7 +13,7 @@ export const HomeForUser = ({ username }) => {
     // エラーメッセージの管理
     const [coordinatesError, setCoordinatesError] = useState('');
     const [itemsError, setItemsError] = useState('');
-    const [showType, setShowType] = useState('coordinates');
+    const [showType, setShowType] = useState('coordinate');
 
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
@@ -63,7 +63,7 @@ export const HomeForUser = ({ username }) => {
     }, [fetchCoordinates]);
 
     const handleShowType = (mode) => {
-        mode === "coordinates" ? setShowType("coordinates") : setShowType("items")
+        mode === "coordinate" ? setShowType("coordinate") : setShowType("item")
     }
 
     return (
@@ -73,16 +73,16 @@ export const HomeForUser = ({ username }) => {
                 <ul className="flex">
                     <li className={
                         "py-[4px] px-[8px] mb-[-2px] cursor-pointer rounded-sm mr-[.5em]"
-                        + (showType === "coordinates" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
-                    } onClick={() => { return handleShowType("coordinates") }}>コーディネート</li>
+                        + (showType === "coordinate" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
+                    } onClick={() => { return handleShowType("coordinate") }}>コーディネート</li>
                     <li className={
                         "py-[4px] px-[8px] mb-[-2px] cursor-pointer rounded-sm"
-                        + (showType === "items" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
-                    } onClick={() => { return handleShowType("items") }}>アイテム</li>
+                        + (showType === "item" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
+                    } onClick={() => { return handleShowType("item") }}>アイテム</li>
                 </ul>
                 <section className="pt-[1em] border-t-[2px] border-sky-600 max-h-[calc(100vh_-_15em)] overflow-y-auto min-h-[5em]">
                     {
-                        showType === "coordinates" ?
+                        showType === "coordinate" ?
                             <>
                                 <h3>コーディネート一覧</h3>
                                 {coordinatesError && <ErrorText>{coordinatesError}</ErrorText>}
@@ -92,21 +92,16 @@ export const HomeForUser = ({ username }) => {
                             <>
                                 <h3>アイテム一覧</h3>
                                 {itemsError && <ErrorText>{itemsError}</ErrorText>}
-                                <List items={items} directory="/items/" />
+                                <List items={items} directory="/item/" />
                             </>
                     }
                 </section>
             </div>
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
-                {/* <Link to={"/" + showType + "/new"}>
+                <Link to={"/" + showType + "/new"}>
                     <Button>登録する</Button>
-                </Link> */}
-                {showType === "items" &&
-                    <Link to={"/items/new"}>
-                        <Button>登録する</Button>
-                    </Link>
-                }
+                </Link>
             </footer>
         </div>
     );

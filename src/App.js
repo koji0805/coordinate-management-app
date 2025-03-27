@@ -72,11 +72,11 @@ function App() {
                 <Route path="/coordinate/new" element={<CoordinateForm mode="new" />} />
 
                 {/* アイテム */}
-                <Route path="/items/:id" element={<Items />} />
+                <Route path="/item/:id" element={<Items />} />
                 {/* アイテム作成 */}
-                <Route path="/items/new" element={<ItemForm mode="new" />} />
+                <Route path="/item/new" element={<ItemForm mode="new" />} />
                 {/* アイテム編集 */}
-                <Route path="/items/edit/:id" element={<ItemForm mode="edit" />} />
+                <Route path="/item/edit/:id" element={<ItemForm mode="edit" />} />
               </>
             ) : (
               <>

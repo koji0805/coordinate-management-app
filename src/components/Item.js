@@ -133,7 +133,7 @@ export default function Items() {
             )}
 
             <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right">
-                <Link to={"/items/edit/" + id}>
+                <Link to={"/item/edit/" + id}>
                     <Button>編集する</Button>
                 </Link>
                 {deleteError && <ErrorText>{deleteError}</ErrorText>}
