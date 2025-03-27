@@ -542,9 +542,6 @@
   .w-\[5em\] {
     width: 5em;
   }
-  .w-\[50\%\] {
-    width: 50%;
-  }
   .w-\[100\%\] {
     width: 100%;
   }
@@ -2123,11 +2120,6 @@
       margin-right: calc(var(--spacing) * 0);
     }
   }
-  .sm\:w-\[100\%\] {
-    @media (width >= 40rem) {
-      width: 100%;
-    }
-  }
   .sm\:w-\[calc\(50\%_-_\.5em\)\] {
     @media (width >= 40rem) {
       width: calc(50% - .5em);
@@ -2156,46 +2148,6 @@
   .md\:w-\[calc\(\(100\%_-_2em\)_\/_3\)\] {
     @media (width >= 48rem) {
       width: calc((100% - 2em) / 3);
-    }
-  }
-  .md\:w-\[calc\(50\%\)\] {
-    @media (width >= 48rem) {
-      width: calc(50%);
-    }
-  }
-  .md\:w-\[calc\(50\%_-_\.5em\)\] {
-    @media (width >= 48rem) {
-      width: calc(50% - .5em);
-    }
-  }
-  .md\:w-\[calc\(50\%_-_1em\)\] {
-    @media (width >= 48rem) {
-      width: calc(50% - 1em);
-    }
-  }
-  .md\:w-\[calc\(50\%_-_2em\)\] {
-    @media (width >= 48rem) {
-      width: calc(50% - 2em);
-    }
-  }
-  .md\:w-\[calc\(100\%_\/_3_-_\.5em\)\] {
-    @media (width >= 48rem) {
-      width: calc(100% / 3 - .5em);
-    }
-  }
-  .md\:w-\[calc\(100\%_\/_3_-_\.em\)\] {
-    @media (width >= 48rem) {
-      width: calc(100% / 3 - .em);
-    }
-  }
-  .md\:w-\[calc\(100\%_\/_3_-_1em\)\] {
-    @media (width >= 48rem) {
-      width: calc(100% / 3 - 1em);
-    }
-  }
-  .md\:w-\[calc\(100\%_3_-_1em\)\] {
-    @media (width >= 48rem) {
-      width: calc(100% 3 - 1em);
     }
   }
   .md\:w-auto {
@@ -2309,16 +2261,6 @@
     @media (width >= 96rem) {
       font-size: var(--text-sm);
       line-height: var(--tw-leading, var(--text-sm--line-height));
-    }
-  }
-  .\@md\:w-\[50\%\] {
-    @container (width >= 28rem) {
-      width: 50%;
-    }
-  }
-  .\@md\:w-\[calc\(50\%_-_1em\)\] {
-    @container (width >= 28rem) {
-      width: calc(50% - 1em);
     }
   }
   .\@md\:w-\[calc\(50\%_1em\)\] {
@@ -2632,13 +2574,6 @@
       }
     }
   }
-  .md\:\[\&\:nth-child\(2n\)\]\:mr-0 {
-    @media (width >= 48rem) {
-      &:nth-child(2n) {
-        margin-right: calc(var(--spacing) * 0);
-      }
-    }
-  }
   .md\:\[\&\:nth-child\(2n\)\]\:mr-\[1em\] {
     @media (width >= 48rem) {
       &:nth-child(2n) {
@@ -2662,13 +2597,6 @@
     @media (width >= 48rem) {
       &:nth-child(3n) {
         margin-right: calc(var(--spacing) * 0);
-      }
-    }
-  }
-  .md\:\[\&\:nth-child\(6n\)\]\:mr-\[1em\] {
-    @media (width >= 48rem) {
-      &:nth-child(6n) {
-        margin-right: 1em;
       }
     }
   }
