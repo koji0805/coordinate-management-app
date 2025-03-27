@@ -9,7 +9,6 @@ import ErrorText from "./ErrorText";
 export default function Coordinate() {
     const { id } = useParams(); // URLの:idを取得
     const [coorinate, setCoordinate] = useState('');
-    const [coordinateItems, setCoordinateItems] = useState([]);
     const [items, setItems] = useState([]);
     const [coorinateError, setCoordinateError] = useState('');
     const [coorinateItemsError, setCoordinateItemsError] = useState('');
@@ -18,7 +17,6 @@ export default function Coordinate() {
     // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
     const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
     const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
-    const [isEditMode, setIsEditMode] = useState(false);
     // ページ遷移用
     const navigate = useNavigate();
 
@@ -48,7 +46,6 @@ export default function Coordinate() {
             });
             if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
             const coordinateData = await response.json();
-            setCoordinateItems(coordinateData);
 
             // 各coordinate_itemのitem_idに対して個別にアイテムを取得
             const itemPromises = coordinateData.map(async (coordinate) => {
@@ -111,11 +108,6 @@ export default function Coordinate() {
     if (coorinateError) return <div>エラー: {coorinateError.message}</div>;
     if (coorinateItemsError) return <div>エラー: {coorinateItemsError.message}</div>;
     if (itemError) return <div>エラー: {itemError.message}</div>;
-
-    const handleIsEditMode = () => {
-        const nextMode = !isEditMode
-        setIsEditMode(nextMode)
-    }
 
     return (<>
         <div className="p-[1em] max-w-[calc(900px_+_4em)] m-auto">
