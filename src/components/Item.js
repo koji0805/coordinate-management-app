@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
+import { H3 } from "./Header";
 import Button, { GrayButton } from "./Button";
 import ItemListItem from "./ListItem";
 import ErrorText from "./ErrorText";
@@ -109,7 +110,7 @@ export default function Items() {
             <Dl dt="カテゴリー" dd={item.category}></Dl>
             <Dl dt="メモ" dd={item.memo}></Dl>
 
-            <h3 className="text-[20px] font-bold mt-[16px]">使用したコーディネート</h3>
+            <H3>使用したコーディネート</H3>
             {coordinates.length > 0 ? (
                 <ul className="flex flex-wrap">
                     {coordinates.map((coord) => (

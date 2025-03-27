@@ -13,7 +13,7 @@ export default function ItemListItem({ item = {}, to, title, date }) {
                         <FaImage />
                     </span>
                 </p>
-                <h3 className="whitespace-nowrap text-ellipsis w-[100%] overflow-hidden">{title}</h3>
+                <p className="whitespace-nowrap text-ellipsis w-[100%] overflow-hidden">{title}</p>
                 {date && <p>{date}</p>}
             </Link>
         </li>

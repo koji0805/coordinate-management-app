@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import Button, { GrayButton } from "./Button";
+import { H3 } from "./Header";
 import ItemListItem from "./ListItem";
 import ErrorText from "./ErrorText";
 
@@ -126,7 +127,7 @@ export default function Coordinate() {
             <h2 className="text-[24px] font-bold">{coorinate.name}</h2>
             <p>{coorinate.memo}</p>
             <div className="mt-[.5em]">
-                <h3 className="text-[20px]">使用したアイテム</h3>
+                <H3>使用したアイテム</H3>
                 <ul className="">
                     {items.map((item) => {
                         return (

@@ -1,4 +1,7 @@
 import { CustomNavLink } from "./CustomLink";
+export const H3 = ({ children }) => {
+    return (<h3 className="text-[20px] font-bold mt-[16px]">children</h3>)
+}
 const Header = ({ isLoggedIn, onLogout }) => {
 
     const ItemsForUser = () => {
