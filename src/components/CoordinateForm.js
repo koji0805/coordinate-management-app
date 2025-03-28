@@ -182,6 +182,7 @@ export default function ItemForm({ mode }) {
                     i18n={"ja"}
                     asSingle={true}
                     showShortcuts={true}
+                    readOnly={true}
                     inputName="day"
                     placeholder="YYYY-MM-DD"
                     value={
@@ -197,8 +198,7 @@ export default function ItemForm({ mode }) {
                             }));
                         }
                     }
-                    inputClassName={"border-slate-200 border-[1px] border-solid p-[8px] w-full rounded-sm placeholder:text-slate-400 text-black"}
-                    // containerClassName=""
+                    inputClassName={"border-slate-200 border-[1px] border-solid p-[8px] w-full rounded-sm placeholder:text-slate-400 text-black cursor-pointer"}
                     popoverDirection="down"
                     startWeekOn="mon"
                     configs={{
@@ -220,11 +220,9 @@ export default function ItemForm({ mode }) {
                                 name=" usedItem"
                                 value={item.id}
                                 className="hidden"
-                                // hidden
                                 checked={checkedItems.includes(item.id)}
                                 onChange={() => { handleCheckboxChange(item.id) }}
                             />
-
                             <p className="cursor-pointer p-[.5em] bg-slate-400 text-center text-slate-50">
                                 <span className="text-[40px] inline-block">
                                     <FaImage />
