@@ -7,7 +7,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
     const ItemsForUser = () => {
         return (<>
             <CustomNavLink to="/home">ホーム</ CustomNavLink>
-            <CustomNavLink to="/mypage">マイページ</ CustomNavLink>
+            <CustomNavLink to="/setting">設定</ CustomNavLink>
             <button className="bg-slate-50 text-sky-600 p-[4px] rounded-md hover:bg-sky-100 cursor-pointer" onClick={onLogout}>ログアウト</button>
         </>)
     }
