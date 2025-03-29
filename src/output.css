@@ -791,9 +791,6 @@
   .border-b-white {
     border-bottom-color: var(--color-white);
   }
-  .bg-\[\#e2d06e\] {
-    background-color: #e2d06e;
-  }
   .bg-amber-100 {
     background-color: var(--color-amber-100);
   }

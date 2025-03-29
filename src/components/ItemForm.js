@@ -1,8 +1,9 @@
 import { CustomForm, InputText, RadioButton, Textarea } from "./FormParts";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+import { getItem, postItem, putItem } from "../api/itemsAPI";
 import Button from "./Button";
-import apiClient from "../api/client";
+import ErrorText from "./ErrorText";
 export default function ItemForm({ mode }) {
     // フォームデータの状態管理
     const [formData, setFormData] = useState({
@@ -12,34 +13,26 @@ export default function ItemForm({ mode }) {
         memo: '',
     });
     const { id } = useParams(); // URLの:idを取得
-
-    // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
-    /**
-     * アイテムの取得処理
-     */
-    const fetchItems = useCallback(async () => {
-        if (mode === "edit") {
-            try {
-                const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-                });
-                if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-                const data = await response.json(); // JSON形式のデータを取得
-                setFormData(data); // アイテム一覧を更新
-            } catch (err) {
-                // setItemError(err.message); // エラー内容を状態にセット
-            }
-        }
-    }, [API_BASE_URL, token, id, mode]);
+    const [itemError, setItemError] = useState('');
 
     /**
-     * 初回レンダリング時にアイテム、コーディネートを取得
+     * 初回レンダリング時にアイテムを取得
      */
     useEffect(() => {
-        fetchItems();
-    }, [fetchItems]);
+        if (mode === "edit") {
+            // 所持アイテム
+            const fetchItems = async () => {
+                try {
+                    const data = await getItem(id);
+                    setFormData(data);
+                } catch (err) {
+                    setItemError('該当アイテムの取得に失敗しました');
+                }
+            };
+            fetchItems();
+        }
+    }, [id, mode]);
+
     // バリデーションエラーの状態管理
     const [error, setError] = useState('');
 
@@ -60,10 +53,10 @@ export default function ItemForm({ mode }) {
         e.preventDefault();
         try {
             if (mode === "new") {
-                await apiClient.post('/items', formData); // バックエンドにアカウント作成リクエストを送信
+                await postItem(formData);
                 alert('アイテムが作成されました！ホームから確認できます');
             } else {
-                await apiClient.put(('/items/' + id), formData); // バックエンドにアカウント作成リクエストを送信
+                await putItem(id, formData)
                 alert('アイテムが更新されました！ホームから確認できます');
             }
             navigate('/home'); // ログイン画面に遷移
@@ -86,15 +79,6 @@ export default function ItemForm({ mode }) {
             }
         }
     };
-    const [selectedCategory, setSelectedCategory] = useState('obi');
-    const [selectedColor, setSelectedColor] = useState('red-600');
-
-    const handleCategoryChange = (e) => {
-        setSelectedCategory(e.target.value);
-    }
-    const handleCategoryColor = (e) => {
-        setSelectedColor(e.target.value);
-    }
 
     const colorMap = {
         "red-600": "赤",
@@ -115,6 +99,7 @@ export default function ItemForm({ mode }) {
     function getColorText(color) {
         return colorMap[color] || color;
     }
+    if (itemError) return <ErrorText>{itemError}</ErrorText>
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
             <h2 className="text-[24px] font-bold mb-[16px]">{mode === "new" ? "作成" : "編集"}</h2>
@@ -170,7 +155,6 @@ export default function ItemForm({ mode }) {
             {error && <p className="text-red-500">{error}</p>}
             <p className="bg-white bg-stone-950"></p>
             <Button type="submit">登録する</Button>
-            <p className="bg-red-600 bg-orange-400 bg-yellow-300 bg-green-600 bg-blue-600 bg-purple-600 bg-cyan-200 bg-lime-200 bg-pink-400 bg-slate-400 bg-slate-200 bg-[#e2d06e] bg-stone-950 bg-white "></p>{/* for tailwindcss */}
         </CustomForm>
     </>);
 }

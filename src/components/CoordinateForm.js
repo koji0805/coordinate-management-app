@@ -1,8 +1,10 @@
 import { CustomForm, InputText, Textarea } from "./FormParts";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaImage } from "react-icons/fa";
-import apiClient from "../api/client";
+import { getCoordinate, postCoordinate, putCoordinate } from "../api/coordinateAPI";
+import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../api/coordinate_itemsAPI";
+import { getAllItems } from "../api/itemsAPI";
 import Button from "./Button";
 import ErrorText from "./ErrorText";
 import Datepicker from "react-tailwindcss-datepicker";
@@ -25,8 +27,9 @@ export default function ItemForm({ mode }) {
     // アイテム全体の状態管理
     const [items, setItems] = useState([]);
     const [itemsError, setItemsError] = useState('');
-
+    const [coordinateError, setCoordinateError] = useState('')
     const [checkedItems, setCheckedItems] = useState([]);
+    const [coordinateItemsError, setCoordinateItemsError] = useState('');
 
     useEffect(() => {
         setFormCoodItemData(prevData => ({
@@ -43,66 +46,49 @@ export default function ItemForm({ mode }) {
         );
     };
 
-    // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
-
-    /**
-     * コーディネートの取得処理
-     */
-    const fetchCoordinate = useCallback(async () => {
-        if (mode === "edit") {
-            try {
-                const response_coordinates = await fetch(`${API_BASE_URL}/coordinates/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-                });
-                if (!response_coordinates.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-                const data_coordinates = await response_coordinates.json(); // JSON形式のデータを取得
-                setCoordFormData(data_coordinates); // アイテム一覧を更新
-                const response_coordinateItems = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-                });
-                if (!response_coordinateItems.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-                const data_coordinateItems = await response_coordinateItems.json(); // JSON形式のデータを取得
-                const data_day = data_coordinateItems[0].day || today;
-                const item_list = data_coordinateItems.map((item) => item.item_id);
-                setFormCoodItemData(prevData => ({
-                    ...prevData,
-                    "items": item_list,
-                    "day": data_day
-                }));
-
-                setCheckedItems(item_list);
-
-            } catch (err) {
-                // setItemError(err.message); // エラー内容を状態にセット
-            }
-        }
-    }, [mode, id, token, today]);
-
-    /**
-     * アイテムの取得処理
-     */
-    const fetchItems = useCallback(async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/items`, {
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
-            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-            const data = await response.json(); // JSON形式のデータを取得
-            setItems(data); // アイテム一覧を更新
-        } catch (err) {
-            setItemsError(err.message); // エラー内容を状態にセット
-        }
-    }, [API_BASE_URL, token]);
-
-    /**
-     * 初回レンダリング時にアイテム、コーディネートを取得
-     */
+    // 初回レンダリング時に情報を取得
     useEffect(() => {
-        fetchItems();
-        fetchCoordinate();
-    }, [fetchCoordinate, fetchItems]);
+        if (mode === "edit") {
+            const fetchCoordinate = async () => {
+                try {
+                    const data_coordinates = await getCoordinate(id);
+                    setCoordFormData(data_coordinates);
+                } catch (err) {
+                    setCoordinateError('コーディネートの取得に失敗しました');
+                }
+            };
+            fetchCoordinate();
+
+            const fetchCoordinateItems = async () => {
+                try {
+                    const data_coordinateItems = await getCoordinateItems(id);
+                    const data_day = (data_coordinateItems[0] ? data_coordinateItems[0].day : today)
+                    const item_list = data_coordinateItems.map((item) => item.id);
+                    setFormCoodItemData(prevData => ({
+                        ...prevData,
+                        "items": item_list,
+                        "day": data_day
+                    }));
+                    setCheckedItems(item_list);
+                } catch (err) {
+                    setCoordinateItemsError('使用したアイテムの取得に失敗しました');
+                }
+            };
+            fetchCoordinateItems();
+        }
+
+        // 所持アイテムを取得して更新
+        const fetchAndSetItems = async () => {
+            try {
+                const data_items = await getAllItems();
+                setItems(data_items);
+            } catch (err) {
+                setCoordinateError('所持しているアイテムの取得に失敗しました');
+            }
+        };
+        fetchAndSetItems();
+    }, [id, mode, today]);
+
     // バリデーションエラーの状態管理
     const [error, setError] = useState('');
 
@@ -122,7 +108,7 @@ export default function ItemForm({ mode }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const dayToUse = formCoodItemData.day || today;
-        const payload = {
+        const formCoordItemsData = {
             coordinateItems: {
                 day: dayToUse
             },
@@ -130,19 +116,11 @@ export default function ItemForm({ mode }) {
         };
         try {
             if (mode === "new") {
-                const response = await apiClient.post('/coordinates/', formCoordData); // バックエンドにアカウント作成リクエストを送信
-                const newCodeId = response.data.id
-                await apiClient.post(`/coordinate_items/?coordinate_id=${newCodeId}`, payload);
-                alert('コーディネートが作成されました！ホームから確認できます');
+                const newId = await postCoordinate(formCoordData);
+                await postCoordinateItems(newId, formCoordItemsData);
             } else {
-                await apiClient.put(('/coordinates/' + id), formCoordData); // バックエンドにアカウント修正リクエストを送信
-                const response = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
-                    method: 'DELETE', // HTTPメソッド
-                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-                });
-                if (!response.ok || !response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
-                await apiClient.post(`/coordinate_items/?coordinate_id=${id}`, payload);
-                alert('コーディネートが更新されました！ホームから確認できます');
+                await putCoordinate(id, formCoordData)
+                await putCoordinateItems(id, formCoordItemsData)
             }
             navigate('/home'); // ログイン画面に遷移
         } catch (err) {
@@ -165,6 +143,8 @@ export default function ItemForm({ mode }) {
         }
     };
 
+    if (coordinateError) return <div>コーディネートエラー: {coordinateError.message}</div>;
+    if (coordinateItemsError) return <div>使用アイテムエラー: {coordinateItemsError}</div>;
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
             <h2 className="text-[24px] font-bold mb-[16px]">{mode === "new" ? "作成" : "編集"}</h2>

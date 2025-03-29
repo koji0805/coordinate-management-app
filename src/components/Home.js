@@ -5,6 +5,8 @@ import ErrorText from "./ErrorText";
 import Button from "./Button";
 import ItemFilter from "./ItemFliter";
 import { Link } from "react-router-dom";
+import { getAllItems } from "../api/itemsAPI";
+import { getAllCoordinate } from "../api/coordinateAPI";
 
 export const HomeForUser = ({ username }) => {
     // アイテム全体の状態管理
@@ -18,49 +20,34 @@ export const HomeForUser = ({ username }) => {
     // フィルタリング状態の管理
     const [selectedCategory, setSelectedCategory] = useState("すべて");
 
-    // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
-
     /**
      * アイテムの取得処理
      */
-    const fetchItems = useCallback(async () => {
+    const fetchAndSetItems = useCallback(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/items`, {
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
-            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-            const data = await response.json(); // JSON形式のデータを取得
-            setItems(data); // アイテム一覧を更新
+            const fetchItems = await getAllItems();
+            setItems(fetchItems);
         } catch (err) {
-            setItemsError(err.message); // エラー内容を状態にセット
+            setItemsError('アイテムの取得に失敗しました。');
         }
-    }, [API_BASE_URL, token]);
+    }, []);
 
     /**
      * コーディネートの取得処理
      */
-    const fetchCoordinates = useCallback(async () => {
+    const fetchAndSetCoordinate = useCallback(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/coordinates`, {
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
-            if (!response.ok) throw new Error('コーディネートの取得に失敗しました'); // エラーハンドリング
-            const data = await response.json(); // JSON形式のデータを取得
-            setCoordinates(data); // 一覧を更新
+            const fetchCoordinates = await getAllCoordinate();
+            setCoordinates(fetchCoordinates);
         } catch (err) {
-            setCoordinatesError(err.message); // エラー内容を状態にセット
+            setCoordinatesError('コーディネート一覧の取得に失敗しました');
         }
-    }, [API_BASE_URL, token]);
+    }, [])
 
-    /**
-     * 初回レンダリング時にアイテム、コーディネートを取得
-     */
     useEffect(() => {
-        fetchItems();
-        fetchCoordinates();
-    }, [fetchItems, fetchCoordinates]);
+        fetchAndSetItems();
+        fetchAndSetCoordinate();
+    }, [fetchAndSetItems, fetchAndSetCoordinate])
 
     useEffect(() => {
     }, [selectedCategory]);

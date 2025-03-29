@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { authMe } from "./api/authAPI";
 import Header from "./components/Header";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
@@ -9,7 +10,6 @@ import Coordinate from "./components/Coordinate";
 import CoordinateForm from "./components/CoordinateForm";
 import Items from "./components/Item";
 import ItemForm from "./components/ItemForm";
-import apiClient from './api/client';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // ログイン状態を管理
@@ -19,17 +19,17 @@ function App() {
   // コンポーネントがマウントされたときにトークンをチェック
   useEffect(() => {
     const verifyToken = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
+      const access_token = localStorage.getItem('access_token');
+      if (access_token) {
         try {
           // トークンを使ってユーザー情報を取得
-          const response = await apiClient.get('/auth/me');
-
+          const userData = await authMe(access_token);
           setIsLoggedIn(true);
-          setUsername(response.data.username);
+          setUsername(userData.username);
         } catch (error) {
           // トークンが無効な場合はローカルストレージから削除
-          localStorage.removeItem('token');
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('refresh_token');
         }
       }
       setIsLoading(false);
@@ -47,7 +47,8 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false); // ログイン状態をリセット
     setUsername(''); // ユーザー名をリセット
-    localStorage.removeItem('token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
   };
 
   // ローディング中はローディング表示

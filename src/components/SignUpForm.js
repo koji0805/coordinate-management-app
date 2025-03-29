@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../api/client';
+import { signup } from '../api/authAPI';
 import Button from "./Button";
 import CustomLink from "./CustomLink";
 import { CustomForm, InputText } from "./FormParts";
@@ -31,7 +31,7 @@ const SignUpForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await apiClient.post('/auth/signup', formData); // バックエンドにアカウント作成リクエストを送信
+            await signup(formData);
             alert('アカウントが作成されました！ログイン画面に進んでください。');
             navigate('/login'); // ログイン画面に遷移
         } catch (err) {

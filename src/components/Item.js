@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
+import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../api/itemsAPI";
 import { H3 } from "./Header";
 import Button, { GrayButton } from "./Button";
 import ItemListItem from "./ListItem";
@@ -13,49 +14,33 @@ export default function Items() {
     const [coordinates, setCoordinates] = useState([]);
     const [coordinatesError, setCoordinatesrror] = useState('');
     const [deleteError, setDeleteError] = useState('');
-    // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIのベースURL
-    const token = localStorage.getItem('token'); // ログイン時に保存したトークンを取得
+
     // ページ遷移用
     const navigate = useNavigate();
-    /**
-     * アイテムの取得処理
-     */
-    const fetchItem = useCallback(async () => {
-        try {
-            const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
-            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-            const data = await response.json(); // JSON形式のデータを取得
-            setItem(data); // アイテム一覧を更新
-        } catch (err) {
-            setItemError(err.message); // エラー内容を状態にセット
-        }
-    }, [API_BASE_URL, token, id]);
 
-    const fetchCoordinates = useCallback(async () => {
+    // 所持アイテムを取得して更新
+    const fetchAndSetItem = useCallback(async () => {
         try {
-            const response = await fetch(`${API_BASE_URL}/items/${id}/coordinates`, {
-                headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-            });
-            if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-            const data = await response.json(); // JSON形式のデータを取得
-            setCoordinates(data); // アイテム一覧を更新
+            const data_item = await getItem(id);
+            setItem(data_item);
         } catch (err) {
-            setCoordinatesrror(err.message); // エラー内容を状態にセット
+            setItemError('アイテムの取得に失敗しました');
         }
-    }, [API_BASE_URL, token, id]);
-
-    /**
-     * 初回レンダリング時にアイテム、コーディネートを取得
-     */
+    }, [id]);
+    // 所持アイテムを取得して更新
+    const fetchAndSetCoordinate = useCallback(async () => {
+        try {
+            const data_coordinate = await getCoordinateByItem(id);
+            setCoordinates(data_coordinate);
+        } catch (err) {
+            setItemError('アイテムの取得に失敗しました');
+        }
+    }, [id]);
+    // 
     useEffect(() => {
-        fetchItem();
-    }, [fetchItem]);
-    useEffect(() => {
-        fetchCoordinates();
-    }, [fetchCoordinates]);
+        fetchAndSetItem();
+        fetchAndSetCoordinate();
+    }, [fetchAndSetItem, fetchAndSetCoordinate]);
 
     const ColorMark = ({ color }) => {
         const colorClassName = "bg-" + color;
@@ -73,26 +58,19 @@ export default function Items() {
         );
     }
 
-
     /**
      * アイテム削除処理
      */
     const handleDeleteItem = async () => {
-        try {
-            if (window.confirm(`${item.name}を削除しますか？`)) {
-                const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-                    method: 'DELETE', // HTTPメソッド
-                    headers: { Authorization: `Bearer ${token}` }, // トークンをヘッダーに追加
-                });
-
-                if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+        if (window.confirm(`${item.name}を削除しますか？`)) {
+            try {
+                await deleteItemfromCoordinates(id);
+                await deleteItems(id, item.name);
                 alert('アイテムが削除されました！ホーム画面を表示します');
-                navigate('/home'); // ログイン画面に遷移
-            } else {
-                return
+                navigate('/home');
+            } catch (err) {
+                setDeleteError(err.message); // エラー内容を状態にセット
             }
-        } catch (err) {
-            setDeleteError(err.message); // エラー内容を状態にセット
         }
     };
 

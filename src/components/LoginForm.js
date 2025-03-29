@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../api/client';
+import { login } from '../api/authAPI';
 import Button from "./Button";
 import CustomLink from "./CustomLink";
 import { CustomForm, InputText } from "./FormParts";
@@ -16,13 +16,12 @@ const LoginCustomForm = ({ onLogin }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await apiClient.post('/auth/login', { email, password }); // ログインリクエスト
-            const { token } = response.data; // トークンを取得
-            const { username } = response.data; // ユーザーネームを取得
-            localStorage.setItem('token', token); // トークンをローカルストレージに保存
+            const response = await login(email, password);
+            const { access_token, refresh_token, username } = response.data; // トークンを取得
+            localStorage.setItem('access_token', access_token); // アクセストークンをローカルストレージに保存
+            localStorage.setItem('refresh_token', refresh_token); // リフレッシュトークンをローカルストレージに保存
             onLogin(username); // 親コンポーネントにログインイベントを伝達
-            navigate('/home'); // ホーム画面に遷移
-        } catch {
+        } catch (err) {
             setError('ログインに失敗しました。ユーザー名またはパスワードを確認してください。');
         }
     };
