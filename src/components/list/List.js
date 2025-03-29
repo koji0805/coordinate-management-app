@@ -1,4 +1,4 @@
-import ListItem from "./ListItem"
+import ListItem from "../list/ListItem"
 export default function List({ items, directory, date, itemType }) {
     return (<>
         <ul className="">

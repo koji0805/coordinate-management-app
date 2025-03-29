@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { SmallWhiteButton, SmallButton } from "./Button";
+import { SmallWhiteButton, SmallButton } from "../common/Button";
 
 export const CustomForm = ({ children, onSubmit, className }) => {
     return (<form onSubmit={onSubmit} className={"max-w-[400px] m-auto mt-[40px] p-[8px] " + (className ? className : "")}>

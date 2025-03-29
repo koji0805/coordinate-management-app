@@ -1,17 +1,15 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../api/authAPI';
-import Button from "./Button";
-import CustomLink from "./CustomLink";
-import { CustomForm, InputText } from "./FormParts";
-import ErrorText from './ErrorText';
-import HintIcon from './HintIcon';
+import { login } from '../../api/authAPI';
+import Button from "../common/Button";
+import CustomLink from "../common/CustomLink";
+import { CustomForm, InputText } from "../common/FormParts";
+import ErrorText from '../common/ErrorText';
+import { HintIcon } from '../common/Icon';
 
-const LoginCustomForm = ({ onLogin }) => {
+const LoginPage = ({ onLogin }) => {
     const [email, setEmail] = useState(''); // ユーザー名入力
     const [password, setPassword] = useState(''); // パスワード入力
     const [error, setError] = useState(''); // エラーメッセージ
-    const navigate = useNavigate(); // ページ遷移用
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -47,4 +45,4 @@ const LoginCustomForm = ({ onLogin }) => {
         </CustomForm>
     </>)
 }
-export default LoginCustomForm;
+export default LoginPage;

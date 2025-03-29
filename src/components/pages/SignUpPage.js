@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../api/authAPI';
-import Button from "./Button";
-import CustomLink from "./CustomLink";
-import { CustomForm, InputText } from "./FormParts";
-import ErrorText from './ErrorText';
-import HintIcon from './HintIcon';
+import { signup } from '../../api/authAPI';
+import Button from "../common/Button";
+import CustomLink from "../common/CustomLink";
+import { CustomForm, InputText } from "../common/FormParts";
+import ErrorText from '../common/ErrorText';
+import { HintIcon } from '../common/Icon';
 
 const SignUpForm = () => {
     // フォームデータの状態管理

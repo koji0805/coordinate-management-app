@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
-import { getCoordinate, deleteCoordinate } from "../api/coordinateAPI";
-import { getCoordinateItems, deleteCoordinateItems } from "../api/coordinate_itemsAPI";
-import Button, { GrayButton } from "./Button";
-import { H3 } from "./Header";
-import ItemListItem from "./ListItem";
-import ErrorText from "./ErrorText";
-import { useNavigate } from "react-router-dom";
+import { getCoordinate, deleteCoordinate } from "../../api/coordinateAPI";
+import { getCoordinateItems, deleteCoordinateItems } from "../../api/coordinate_itemsAPI";
+import Button, { GrayButton } from "../common/Button";
+import { H3 } from "../layout/Header";
+import ItemListItem from "../list/ListItem";
+import ErrorText from "../common/ErrorText";
 
 export default function Coordinate() {
     const { id } = useParams(); // URLの:idを取得

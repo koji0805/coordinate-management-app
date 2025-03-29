@@ -1,10 +1,10 @@
-import { CustomForm, InputText, RadioButton, Textarea } from "./FormParts";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
-import { getItem, postItem, putItem } from "../api/itemsAPI";
-import Button from "./Button";
-import ErrorText from "./ErrorText";
-export default function ItemForm({ mode }) {
+import { getItem, postItem, putItem } from "../../api/itemsAPI";
+import { CustomForm, InputText, RadioButton, Textarea } from "../common/FormParts";
+import Button from "../common/Button";
+import ErrorText from "../common/ErrorText";
+export default function ItemFormPage({ mode }) {
     // フォームデータの状態管理
     const [formData, setFormData] = useState({
         name: '',

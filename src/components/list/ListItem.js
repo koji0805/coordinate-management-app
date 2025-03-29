@@ -1,6 +1,6 @@
 import { FaImage } from "react-icons/fa";
 import { Link } from "react-router-dom";
-export default function ItemListItem({ item = {}, to, title, date }) {
+export default function ListItem({ item = {}, to, title, date }) {
     return (
         <li className="
             inline-block mr-[1em] mb-[.5em] w-[100%] 

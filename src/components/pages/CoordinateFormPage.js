@@ -1,13 +1,13 @@
-import { CustomForm, InputText, Textarea } from "./FormParts";
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaImage } from "react-icons/fa";
-import { getCoordinate, postCoordinate, putCoordinate } from "../api/coordinateAPI";
-import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../api/coordinate_itemsAPI";
-import { getAllItems } from "../api/itemsAPI";
-import Button from "./Button";
-import ErrorText from "./ErrorText";
 import Datepicker from "react-tailwindcss-datepicker";
+import { getCoordinate, postCoordinate, putCoordinate } from "../../api/coordinateAPI";
+import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../../api/coordinate_itemsAPI";
+import { getAllItems } from "../../api/itemsAPI";
+import { CustomForm, InputText, Textarea } from "../common/FormParts";
+import Button from "../common/Button";
+import ErrorText from "../common/ErrorText";
 
 export default function ItemForm({ mode }) {
     const today = useMemo(() => new Date().toISOString(), []);

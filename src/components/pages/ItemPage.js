@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
-import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../api/itemsAPI";
-import { H3 } from "./Header";
-import Button, { GrayButton } from "./Button";
-import ItemListItem from "./ListItem";
-import ErrorText from "./ErrorText";
+import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../../api/itemsAPI";
+import { H3 } from "../layout/Header";
+import Button, { GrayButton } from "../common/Button";
+import ItemListItem from "../list/ListItem";
+import ErrorText from "../common/ErrorText";
 
 export default function Items() {
     const { id } = useParams(); // URLの:idを取得

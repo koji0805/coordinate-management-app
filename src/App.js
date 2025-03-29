@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { authMe } from "./api/authAPI";
-import Header from "./components/Header";
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
-import MyPage from "./components/MyPage";
-import { HomeForUser, HomeForGuest } from "./components/Home";
-import Coordinate from "./components/Coordinate";
-import CoordinateForm from "./components/CoordinateForm";
-import Items from "./components/Item";
-import ItemForm from "./components/ItemForm";
+import Header from "./components/layout/Header";
+import LoginPage from "./components/pages/LoginPage";
+import SignUpPage from "./components/pages/SignUpPage";
+import SettingPage from "./components/pages/SettingPage";
+import { HomeForUser, HomeForGuest } from "./components/pages/HomePage";
+import CoordinatePage from "./components/pages/CoordinatePage";
+import CoordinateFormPage from "./components/pages/CoordinateFormPage";
+import ItemPage from "./components/pages/ItemPage";
+import ItemFormPage from "./components/pages/ItemFormPage";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // ログイン状態を管理
@@ -64,29 +64,29 @@ function App() {
           {isLoggedIn ?
             (
               <>
-                {/* マイページ */}
-                < Route path="/mypage" element={<MyPage username={username} />} />
+                {/* 設定 */}
+                < Route path="/setting" element={<SettingPage username={username} />} />
 
                 {/* コーディネート */}
-                <Route path="/coordinate/:id" element={<Coordinate />} />
+                <Route path="/coordinate/:id" element={<CoordinatePage />} />
                 {/* コーディネート作成 */}
-                <Route path="/coordinate/new" element={<CoordinateForm mode="new" />} />
+                <Route path="/coordinate/new" element={<CoordinateFormPage mode="new" />} />
                 {/* アイテム編集 */}
-                <Route path="/coordinate/edit/:id" element={<CoordinateForm mode="edit" />} />
+                <Route path="/coordinate/edit/:id" element={<CoordinateFormPage mode="edit" />} />
 
                 {/* アイテム */}
-                <Route path="/item/:id" element={<Items />} />
+                <Route path="/item/:id" element={<ItemPage />} />
                 {/* アイテム作成 */}
-                <Route path="/item/new" element={<ItemForm mode="new" />} />
+                <Route path="/item/new" element={<ItemFormPage mode="new" />} />
                 {/* アイテム編集 */}
-                <Route path="/item/edit/:id" element={<ItemForm mode="edit" />} />
+                <Route path="/item/edit/:id" element={<ItemFormPage mode="edit" />} />
               </>
             ) : (
               <>
                 {/* アカウント作成画面 */}
-                <Route path="/signup" element={<SignUpForm />} />
+                <Route path="/signup" element={<SignUpPage />} />
                 {/* ログイン画面 */}
-                <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+                <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
               </>
             )
           }
