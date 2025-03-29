@@ -4,6 +4,7 @@ import { getItem, postItem, putItem } from "../../api/itemsAPI";
 import { CustomForm, InputText, RadioButton, Textarea } from "../common/FormParts";
 import Button from "../common/Button";
 import ErrorText from "../common/ErrorText";
+import { colorMap, getColorText } from "../../constants";
 export default function ItemFormPage({ mode }) {
     // フォームデータの状態管理
     const [formData, setFormData] = useState({
@@ -80,25 +81,6 @@ export default function ItemFormPage({ mode }) {
         }
     };
 
-    const colorMap = {
-        "red-600": "赤",
-        "orange-400": "オレンジ",
-        "yellow-300": "黄色",
-        "green-600": "緑",
-        "blue-600": "青",
-        "purple-600": "紫",
-        "cyan-200": "水色",
-        "lime-200": "黄緑",
-        "pink-400": "ピンク",
-        "slate-400": "灰色",
-        "slate-200": "シルバー",
-        "[#e2d06e]": "ゴールド",
-        "stone-950": "黒",
-        "white": "白"
-    };
-    function getColorText(color) {
-        return colorMap[color] || color;
-    }
     if (itemError) return <ErrorText>{itemError}</ErrorText>
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
