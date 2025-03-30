@@ -65,9 +65,8 @@ export default function Coordinate() {
                 </span>
             </p>
             <h2 className="text-[24px] font-bold">{coordinate.name}</h2>
-            <p className="mb-[.5em]">日付：{coordinate.day ? coordinate.day.split('T')[0] : "日付が取得できませんでした"}</p>
-            <p>メモ：{coordinate.memo}</p>
-            <div className="mt-[.5em]">
+            <p>{coordinate.day ? coordinate.day.split('T')[0] : "日付が取得できませんでした"}</p>
+            <div className="">
                 <H3>使用したアイテム</H3>
                 <ul className="">
                     {
@@ -80,6 +79,10 @@ export default function Coordinate() {
                             <p>使用したアイテムがありません。</p>
                     }
                 </ul>
+            </div>
+            <div className="mt-[.5em]">
+                <H3>メモ</H3>
+                <p>{coordinate.memo}</p>
             </div>
             <div className="mt-[1.5em]">
                 <Link to={"/coordinate/edit/" + id}>
