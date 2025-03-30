@@ -65,7 +65,8 @@ export default function Coordinate() {
                 </span>
             </p>
             <h2 className="text-[24px] font-bold">{coordinate.name}</h2>
-            <p>{coordinate.memo}</p>
+            <p className="mb-[.5em]">日付：{coordinate.day ? coordinate.day.split('T')[0] : "日付が取得できませんでした"}</p>
+            <p>メモ：{coordinate.memo}</p>
             <div className="mt-[.5em]">
                 <H3>使用したアイテム</H3>
                 <ul className="">

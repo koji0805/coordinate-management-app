@@ -14,7 +14,7 @@ export default function ListItem({ item = {}, to, title, date }) {
                     </span>
                 </p>
                 <p className="whitespace-nowrap text-ellipsis w-[100%] overflow-hidden">{title}</p>
-                {date && <p>{date}</p>}
+                {date && <p>{date.split("T")[0]}</p>}
             </Link>
         </li>
     );

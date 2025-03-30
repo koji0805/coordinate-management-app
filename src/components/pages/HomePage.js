@@ -84,7 +84,7 @@ export const HomeForUser = ({ username }) => {
                         showType === "coordinate" ?
                             <>
                                 {coordinatesError && <ErrorText>{coordinatesError}</ErrorText>}
-                                <List items={coordinates} directory="/coordinate/" date="YYYYMMDD" itemType="コーディネート" />
+                                <List items={coordinates} directory="/coordinate/" itemType="コーディネート" />
                             </>
                             :
                             <>
