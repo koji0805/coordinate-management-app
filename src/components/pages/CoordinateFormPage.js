@@ -6,8 +6,11 @@ import { getCoordinate, postCoordinate, putCoordinate } from "../../api/coordina
 import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../../api/coordinate_itemsAPI";
 import { getAllItems } from "../../api/itemsAPI";
 import { CustomForm, InputText, Textarea } from "../common/FormParts";
-import Button from "../common/Button";
+import Button, { WhiteButton } from "../common/Button";
+import ItemFilter from "../item/ItemFilter";
 import ErrorText from "../common/ErrorText";
+import Modal from "../common/Modal";
+
 
 export default function ItemForm({ mode }) {
     const today = useMemo(() => new Date().toISOString(), []);
@@ -15,28 +18,47 @@ export default function ItemForm({ mode }) {
     // フォームデータの状態管理
     const [formCoordData, setCoordFormData] = useState({
         name: '',
+        day: today,
         memo: '',
     });
 
     const [formCoodItemData, setFormCoodItemData] = useState({
         items: [],
-        day: today,
     })
 
     const { id } = useParams(); // URLの:idを取得
     // アイテム全体の状態管理
     const [items, setItems] = useState([]);
-    const [itemsError, setItemsError] = useState('');
     const [coordinateError, setCoordinateError] = useState('')
     const [checkedItems, setCheckedItems] = useState([]);
     const [coordinateItemsError, setCoordinateItemsError] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('すべて');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
+
+    /**
+     * フィルタリング状態に応じたアイテムリストを取得
+     */
+    const filteredItems = items.filter((item) => {
+        if (selectedCategory === "すべて") {
+            return true;
+        }
+        return item.category === selectedCategory;
+    });
+
+    const handleOpenModal = () => {
+        setCheckedItems(formCoodItemData.items)
+        setIsModalOpen(true)
+    };
+    const handleCloseModal = () => setIsModalOpen(false);
+
+    const handleCheckedItems = () => {
         setFormCoodItemData(prevData => ({
             ...prevData,
             items: checkedItems
         }));
-    }, [checkedItems]);
+        handleCloseModal();
+    }
 
     const handleCheckboxChange = (itemId) => {
         setCheckedItems((prev) =>
@@ -62,12 +84,10 @@ export default function ItemForm({ mode }) {
             const fetchCoordinateItems = async () => {
                 try {
                     const data_coordinateItems = await getCoordinateItems(id);
-                    const data_day = (data_coordinateItems[0] ? data_coordinateItems[0].day : today)
                     const item_list = data_coordinateItems.map((item) => item.id);
                     setFormCoodItemData(prevData => ({
                         ...prevData,
                         "items": item_list,
-                        "day": data_day
                     }));
                     setCheckedItems(item_list);
                 } catch (err) {
@@ -87,7 +107,7 @@ export default function ItemForm({ mode }) {
             }
         };
         fetchAndSetItems();
-    }, [id, mode, today]);
+    }, [id, mode]);
 
     // バリデーションエラーの状態管理
     const [error, setError] = useState('');
@@ -107,20 +127,18 @@ export default function ItemForm({ mode }) {
     // フォーム送信時の処理
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const dayToUse = formCoodItemData.day || today;
         const formCoordItemsData = {
-            coordinateItems: {
-                day: dayToUse
-            },
             used_items: formCoodItemData.items
         };
         try {
             if (mode === "new") {
                 const newId = await postCoordinate(formCoordData);
                 await postCoordinateItems(newId, formCoordItemsData);
+                alert('コーディネートが作成されました！ホームから確認できます');
             } else {
-                await putCoordinate(id, formCoordData)
-                await putCoordinateItems(id, formCoordItemsData)
+                await putCoordinate(id, formCoordData);
+                await putCoordinateItems(id, formCoordItemsData);
+                alert('コーディネートが更新されました！ホームから確認できます');
             }
             navigate('/home'); // ログイン画面に遷移
         } catch (err) {
@@ -166,16 +184,18 @@ export default function ItemForm({ mode }) {
                     inputName="day"
                     placeholder="YYYY-MM-DD"
                     value={
-                        formCoodItemData.day
-                            ? { startDate: formCoodItemData.day, endDate: formCoodItemData.day }
+                        formCoordData.day
+                            ? { startDate: formCoordData.day, endDate: formCoordData.day }
                             : { startDate: today, endDate: today }
                     }
                     onChange={
                         (newValue) => {
-                            setFormCoodItemData(prevData => ({
-                                ...prevData,
-                                "day": newValue.startDate
-                            }));
+                            handleChange({
+                                target: {
+                                    name: 'day',
+                                    value: newValue.startDate
+                                }
+                            })
                         }
                     }
                     inputClassName={"border-slate-200 border-[1px] border-solid p-[8px] w-full rounded-sm placeholder:text-slate-400 text-black cursor-pointer"}
@@ -190,29 +210,60 @@ export default function ItemForm({ mode }) {
                 />
             </div>
             <small>使用したアイテム</small>
-            <div className="mb-[28px] flex flex-wrap">
-                {itemsError && <ErrorText>{itemsError}</ErrorText>}
-                {items.map((item) => (
-                    <div className={"cursor-pointer border rounded-sm w-[120px] h-[100px] mr-[8px] nth-[3n]:mr-0 mb-[8px] p-[4px] hover:opacity-50 " + (checkedItems.includes(item.id) ? "bg-sky-600 text-slate-50" : "border-sky-600")} title={item.name} key={item.id}>
-                        <label className="">
-                            <input
-                                type="checkbox"
-                                name=" usedItem"
-                                value={item.id}
-                                className="hidden"
-                                checked={checkedItems.includes(item.id)}
-                                onChange={() => { handleCheckboxChange(item.id) }}
-                            />
-                            <p className="cursor-pointer p-[.5em] bg-slate-400 text-center text-slate-50">
-                                <span className="text-[40px] inline-block">
-                                    <FaImage />
-                                </span>
-                            </p>
-                            <p className="cursor-pointer text-xs w-[100%] overflow-hidden overflow-ellipsis whitespace-nowrap mt-[4px]">{item.name}</p>
-                        </label>
-                    </div>
-                ))}
-            </div>
+            {checkedItems ?
+                <ul>
+                    {
+                        items.filter((item) => checkedItems.includes(item.id)).map((item) => (
+                            <li className="inline-block border rounded-sm w-[120px] h-[100px] mr-[8px] nth-[3n]:mr-0 mb-[8px] p-[4px] bg-sky-600 text-slate-50" title={item.name} key={item.id}>
+                                <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
+                                    <span className="text-[40px] inline-block">
+                                        <FaImage />
+                                    </span>
+                                </p>
+                                <p className="text-xs w-[100%] overflow-hidden overflow-ellipsis whitespace-nowrap mt-[4px]">{item.name}</p>
+                            </li>
+                        ))}
+                </ul >
+                : <p>未選択です</p>}
+            <WhiteButton className="!mb-[8px]" type="button" onClick={handleOpenModal}>アイテムを選択する</WhiteButton>
+            <Modal
+                className=""
+                containerClass="h-[60vh]"
+                header="使用したアイテムを選択"
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
+                footerPrimaryBtn="選択する"
+                primaryBtnFunc={handleCheckedItems}
+            >
+                {/* フィルタリングボタン */}
+                <ItemFilter selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+                <ul>
+                    {filteredItems.length > 0 ?
+                        filteredItems.map((item) => (
+                            <li className={"inline-block cursor-pointer border rounded-sm w-[120px] h-[100px] mr-[8px] nth-[3n]:mr-0 mb-[8px] p-[4px] hover:opacity-50 " + (checkedItems.includes(item.id) ? "bg-sky-600 text-slate-50" : "border-sky-600")} title={item.name} key={item.id}>
+                                <label className="">
+                                    <input
+                                        type="checkbox"
+                                        name=" usedItem"
+                                        value={item.id}
+                                        className="hidden"
+                                        checked={checkedItems.includes(item.id)}
+                                        onChange={() => { handleCheckboxChange(item.id) }}
+                                    />
+                                    <p className="cursor-pointer p-[.5em] bg-slate-400 text-center text-slate-50">
+                                        <span className="text-[40px] inline-block">
+                                            <FaImage />
+                                        </span>
+                                    </p>
+                                    <p className="cursor-pointer text-xs w-[100%] overflow-hidden overflow-ellipsis whitespace-nowrap mt-[4px]">{item.name}</p>
+                                </label>
+                            </li>
+                        )) :
+                        <p>表示するアイテムがありません。</p>
+                    }
+                </ul>
+            </Modal>
+            {coordinateItemsError && <ErrorText>{coordinateItemsError}</ErrorText>}
             <small>メモ</small>
             <div className="mb-[28px]">
                 <Textarea
