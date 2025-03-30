@@ -49,15 +49,8 @@ export const postCoordinateItems = async (newId, coordinateItemsData) => {
  * 使用したアイテムの情報を更新処理
  */
 export const putCoordinateItems = async (id, coordinateItemsData) => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
-            method: 'DELETE', // HTTPメソッド
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('コーディネートの更新準備に失敗しました'); // エラーハンドリング
-        await apiClient.post(`/coordinate_items/?coordinate_id=${id}`, coordinateItemsData);
-        alert('コーディネートが更新されました！ホームから確認できます');
+        await apiClient.put(`/coordinate_items/${id}`, coordinateItemsData);
     } catch (err) {
         return err;
     }
