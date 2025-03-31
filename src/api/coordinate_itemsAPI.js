@@ -39,7 +39,6 @@ export const getCoordinateItems = async (id) => {
 export const postCoordinateItems = async (newId, coordinateItemsData) => {
     try {
         await apiClient.post(`/coordinate_items/?coordinate_id=${newId}`, coordinateItemsData);
-        alert('コーディネートが作成されました！ホームから確認できます');
     } catch (err) {
         return err;
     }
