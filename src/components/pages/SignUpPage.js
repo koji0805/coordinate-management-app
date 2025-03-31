@@ -79,6 +79,7 @@ const SignUpForm = () => {
                 value={formData.password}
                 name="password"
                 InputType="password"
+                minlength="8"
                 required
             />
             {error && <ErrorText className="mb-[4px]">{error}</ErrorText>}

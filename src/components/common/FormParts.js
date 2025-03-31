@@ -8,7 +8,7 @@ export const CustomForm = ({ children, onSubmit, className }) => {
     </form>)
 }
 
-export const InputText = ({ value, placeholder, name, InputType, onChange, required }) => {
+export const InputText = ({ value, placeholder, name, InputType, onChange, required, minlength }) => {
     // パスワード表示制御
     const [isRevealPassword, setIsRevealPassword] = useState(false);
     const isPassword = (InputType === "password");
@@ -19,7 +19,7 @@ export const InputText = ({ value, placeholder, name, InputType, onChange, requi
     }
     // {...(isPassword ? { pattern: "[a-zA-Z0-9!-/:-@[-`{-~]*" } : {})}
     return (<div className={isPassword ? "relative" : ""}>
-        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid placeholder:text-slate-400"} {...(isPassword ? { pattern: "[a-zA-Z0-9!-/:-@[-`{-~]*" } : {})} />
+        <input type={inputType} value={value && value} placeholder={placeholder} name={name && name} onChange={onChange} required={required ? true : false} className={(isPassword ? "pr-[2em] " : "") + "w-[100%] mb-[28px] p-[8px] border-slate-200 border-[1px] border-solid placeholder:text-slate-400"} {...(isPassword ? { pattern: "[a-zA-Z0-9!-/:-@[-`{-~]*" } : {})} {...minlength ? minlength = { minlength } : ""} />
         {isPassword && < span
             onClick={togglePassword}
             role="presentation"
