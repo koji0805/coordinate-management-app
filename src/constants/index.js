@@ -13,7 +13,7 @@ export const colorMap = {
     "[#e2d06e]": "ゴールド",
     "stone-950": "黒",
     "white": "白"
-    // 色を追加したら、src/safelist.cssに追加する
+    // 色を追加したら、src/safelist.cssかsafelist.jsに追加する 
 };
 
 export function getColorText(color) {
