@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
+import { API_BASE_URL } from "../../api/client";
 import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../../api/itemsAPI";
 import { H3 } from "../layout/Header";
 import Button, { GrayButton } from "../common/Button";
@@ -77,12 +78,18 @@ export default function Items() {
     if (itemError) return <div>エラー: {itemError.message}</div>;
 
     return (<>
-        <div className="p-[1em] max-w-[calc(900px_+_4em)] m-auto">
-            <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
-                <span className="text-[100px] inline-block">
-                    <FaImage />
-                </span>
-            </p>
+        <div className="p-[1em] max-w-[calc(900px_+_4em)] m-auto max-h-[calc(100vh_-_13em)] overflow-auto">
+            {
+                item.photo_url ?
+                    <p className="">
+                        <img src={`${API_BASE_URL}${item.photo_url}`} alt={item.name} className="max-h-[320px] block m-auto" />
+                    </p> :
+                    <p className="p-[.5em] bg-slate-400 text-center text-slate-50">
+                        <span className="text-[100px] inline-block">
+                            <FaImage />
+                        </span>
+                    </p>
+            }
             <h2 className="text-[24px] font-bold relative pl-[1.25em]
             "><ColorMark color={item.color} />{item.name}</h2>
             <Dl dt="カテゴリー" dd={item.category}></Dl>
@@ -93,7 +100,7 @@ export default function Items() {
             {coordinates.length > 0 ? (
                 <ul className="flex flex-wrap">
                     {coordinates.map((coord) => (
-                        <ItemListItem key={coord.id} item={coord.id} to={`/coordinate/${coord.id}`} title={coord.name} date={coord.day} />
+                        <ItemListItem key={coord.id} item={coord} to={`/coordinate/${coord.id}`} title={coord.name} date={coord.day} />
                     ))}
                 </ul>
             ) : (

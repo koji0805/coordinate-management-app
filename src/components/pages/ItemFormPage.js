@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from "../../api/client";
 import { getItem, postItem, putItem } from "../../api/itemsAPI";
-import { CustomForm, InputText, RadioButton, Textarea } from "../common/FormParts";
+import { postImage } from "../../api/imagesAPI";
+import { CustomForm, InputText, RadioButton, Textarea, InputPhoto } from "../common/FormParts";
 import Button from "../common/Button";
 import ErrorText from "../common/ErrorText";
 import { colorMap, getColorText } from "../../constants";
 export default function ItemFormPage({ mode }) {
+    const [isLoading, setIsLoading] = useState(true);
+
     // フォームデータの状態管理
     const [formData, setFormData] = useState({
         name: '',
         category: '着物',
         color: 'red-600',
+        photo_url: '',
         memo: '',
     });
     const { id } = useParams(); // URLの:idを取得
     const [itemError, setItemError] = useState('');
+    const [image, setImage] = useState(null);
+    const [prevImageURL, setPrevImageURL] = useState(``);
 
     /**
      * 初回レンダリング時にアイテムを取得
@@ -26,11 +33,18 @@ export default function ItemFormPage({ mode }) {
                 try {
                     const data = await getItem(id);
                     setFormData(data);
+                    if (data.photo_url) {
+                        setPrevImageURL(`${API_BASE_URL}${data.photo_url}`);
+                    }
+                    setIsLoading(false);
                 } catch (err) {
                     setItemError('該当アイテムの取得に失敗しました');
                 }
             };
             fetchItems();
+        } else {
+            setPrevImageURL('');
+            setIsLoading(false);
         }
     }, [id, mode]);
 
@@ -53,11 +67,30 @@ export default function ItemFormPage({ mode }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const updatedData = { ...formData };
+
+            if (image) {
+                const formImage = new FormData();
+                formImage.append("uploaded_file", image);
+                try {
+                    const imageResponse = await postImage(formImage);
+
+                    if (imageResponse && imageResponse.photo_url) {
+                        updatedData.photo_url = imageResponse.photo_url;
+                    } else {
+                        console.error("画像URLが返されませんでした");
+                    }
+                } catch (imageError) {
+                    console.error("画像アップロードエラー:", imageError);
+                    setError('画像のアップロードに失敗しました。画像サイズや形式を確認してください。');
+                    return; // 画像アップロード失敗時は処理を中断
+                }
+            }
             if (mode === "new") {
-                await postItem(formData);
+                await postItem(updatedData);
                 alert('アイテムが作成されました！ホームから確認できます');
             } else {
-                await putItem(id, formData)
+                await putItem(id, updatedData)
                 alert('アイテムが更新されました！ホームから確認できます');
             }
             navigate('/home'); // ログイン画面に遷移
@@ -120,8 +153,14 @@ export default function ItemFormPage({ mode }) {
                     />
                 ))}
             </div>
-            <small>メモ</small>
+            <small>写真</small>
             <div className="mb-[28px]">
+                {!isLoading && (
+                    <InputPhoto onImageSelect={(file) => setImage(file)} prevPhoto={prevImageURL || ''} />
+                )}
+            </div>
+            <small>メモ</small>
+            <div className="mb-[28px] ">
                 <Textarea
                     placeholder="浅草で購入"
                     name="memo"

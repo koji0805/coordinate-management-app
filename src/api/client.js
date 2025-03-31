@@ -7,9 +7,9 @@ export const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIの
 // Axiosインスタンスを作成
 const apiClient = axios.create({
     baseURL: API_BASE_URL, // ベースURLの設定
-    headers: {
-        'Content-Type': 'application/json', // リクエストをJSON形式に設定
-    },
+    // headers: {
+    //     'Content-Type': 'application/json', // リクエストをJSON形式に設定
+    // },
 });
 
 // リクエスト時にトークンを自動的にヘッダーへ追加

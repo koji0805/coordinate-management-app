@@ -2,10 +2,12 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaImage } from "react-icons/fa";
 import Datepicker from "react-tailwindcss-datepicker";
+import { API_BASE_URL } from "../../api/client";
 import { getCoordinate, postCoordinate, putCoordinate } from "../../api/coordinateAPI";
 import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../../api/coordinate_itemsAPI";
 import { getAllItems } from "../../api/itemsAPI";
-import { CustomForm, InputText, Textarea } from "../common/FormParts";
+import { postImage } from "../../api/imagesAPI";
+import { CustomForm, InputText, Textarea, InputPhoto } from "../common/FormParts";
 import Button, { WhiteButton } from "../common/Button";
 import ItemFilter from "../item/ItemFilter";
 import ErrorText from "../common/ErrorText";
@@ -14,7 +16,7 @@ import Modal from "../common/Modal";
 
 export default function ItemForm({ mode }) {
     const today = useMemo(() => new Date().toISOString(), []);
-
+    const [isLoading, setIsLoading] = useState(true);
     // フォームデータの状態管理
     const [formCoordData, setCoordFormData] = useState({
         name: '',
@@ -34,8 +36,8 @@ export default function ItemForm({ mode }) {
     const [coordinateItemsError, setCoordinateItemsError] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('すべて');
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-
+    const [image, setImage] = useState(null);
+    const [prevImageURL, setPrevImageURL] = useState(``);
     /**
      * フィルタリング状態に応じたアイテムリストを取得
      */
@@ -75,6 +77,10 @@ export default function ItemForm({ mode }) {
                 try {
                     const data_coordinates = await getCoordinate(id);
                     setCoordFormData(data_coordinates);
+                    if (data_coordinates.photo_url) {
+                        setPrevImageURL(`${API_BASE_URL}${data_coordinates.photo_url}`);
+                    }
+                    setIsLoading(false);
                 } catch (err) {
                     setCoordinateError('コーディネートの取得に失敗しました');
                 }
@@ -95,6 +101,9 @@ export default function ItemForm({ mode }) {
                 }
             };
             fetchCoordinateItems();
+        } else {
+            setPrevImageURL('');
+            setIsLoading(false);
         }
 
         // 所持アイテムを取得して更新
@@ -131,12 +140,30 @@ export default function ItemForm({ mode }) {
             used_items: formCoodItemData.items
         };
         try {
+            const updatedData = { ...formCoordData };
+            if (image) {
+                const formImage = new FormData();
+                formImage.append("uploaded_file", image);
+                try {
+                    const imageResponse = await postImage(formImage);
+
+                    if (imageResponse && imageResponse.photo_url) {
+                        updatedData.photo_url = imageResponse.photo_url;
+                    } else {
+                        console.error("画像URLが返されませんでした");
+                    }
+                } catch (imageError) {
+                    console.error("画像アップロードエラー:", imageError);
+                    setError('画像のアップロードに失敗しました。画像サイズや形式を確認してください。');
+                    return; // 画像アップロード失敗時は処理を中断
+                }
+            }
             if (mode === "new") {
-                const newId = await postCoordinate(formCoordData);
+                const newId = await postCoordinate(updatedData);
                 await postCoordinateItems(newId, formCoordItemsData);
                 alert('コーディネートが作成されました！ホームから確認できます');
             } else {
-                await putCoordinate(id, formCoordData);
+                await putCoordinate(id, updatedData);
                 await putCoordinateItems(id, formCoordItemsData);
                 alert('コーディネートが更新されました！ホームから確認できます');
             }
@@ -264,6 +291,12 @@ export default function ItemForm({ mode }) {
                 </ul>
             </Modal>
             {coordinateItemsError && <ErrorText>{coordinateItemsError}</ErrorText>}
+            <small>写真</small>
+            <div className="mb-[28px]">
+                {!isLoading && (
+                    <InputPhoto onImageSelect={(file) => setImage(file)} prevPhoto={prevImageURL || ''} />
+                )}
+            </div>
             <small>メモ</small>
             <div className="mb-[28px]">
                 <Textarea
