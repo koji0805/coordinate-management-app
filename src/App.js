@@ -30,7 +30,6 @@ function App() {
         } catch (error) {
           // トークンが無効な場合はローカルストレージから削除
           localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
         }
       }
       setIsLoading(false);
