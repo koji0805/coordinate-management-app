@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import { API_BASE_URL } from "../../api/client";
-import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../../api/itemsAPI";
+import { deleteItem, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../../api/itemsAPI";
 import { H2, H3 } from "../layout/Header";
 import Button, { GrayButton } from "../common/Button";
 import ItemListItem from "../list/ListItem";
@@ -28,13 +28,13 @@ export default function Items() {
             setItemError('アイテムの取得に失敗しました');
         }
     }, [id]);
-    // 所持アイテムを取得して更新
+    // 使用したコーディネートを取得して更新
     const fetchAndSetCoordinate = useCallback(async () => {
         try {
             const data_coordinate = await getCoordinateByItem(id);
             setCoordinates(data_coordinate);
         } catch (err) {
-            setItemError('アイテムの取得に失敗しました');
+            setCoordinatesrror('コーディネートの取得に失敗しました');
         }
     }, [id]);
     // 
@@ -66,7 +66,7 @@ export default function Items() {
         if (window.confirm(`${item.name}を削除しますか？`)) {
             try {
                 await deleteItemfromCoordinates(id);
-                await deleteItems(id, item.name);
+                await deleteItem(id, item.name);
                 alert('アイテムが削除されました！ホーム画面を表示します');
                 navigate('/home');
             } catch (err) {
