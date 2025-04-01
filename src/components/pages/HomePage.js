@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { getAllItems } from "../../api/itemsAPI";
 import { getAllCoordinate } from "../../api/coordinateAPI";
 
-export const HomeForUser = ({ username }) => {
+export const HomeForUser = ({ username, type, setHomeType }) => {
     // アイテム全体の状態管理
     const [items, setItems] = useState([]);
     // コーディネート全体の状態管理
@@ -15,10 +15,9 @@ export const HomeForUser = ({ username }) => {
     // エラーメッセージの管理
     const [coordinatesError, setCoordinatesError] = useState('');
     const [itemsError, setItemsError] = useState('');
-    const [showType, setShowType] = useState('coordinate');
+    const [showType, setShowType] = useState(type === "item" ? "item" : "coordinate");
     // フィルタリング状態の管理
     const [selectedCategory, setSelectedCategory] = useState("すべて");
-
     /**
      * アイテムの取得処理
      */
@@ -52,7 +51,13 @@ export const HomeForUser = ({ username }) => {
     }, [selectedCategory]);
 
     const handleShowType = (mode) => {
-        mode === "coordinate" ? setShowType("coordinate") : setShowType("item")
+        if (mode === "coordinate") {
+            setShowType("coordinate");
+            setHomeType('coordinate');
+        } else {
+            setShowType("item")
+            setHomeType("item")
+        }
     }
 
     /**

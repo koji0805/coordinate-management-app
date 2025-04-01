@@ -15,6 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // ログイン状態を管理
   const [username, setUsername] = useState('ゲストさん'); // ログイン中のユーザー名
   const [isLoading, setIsLoading] = useState(true); // ローディング状態
+  const [homeType, setHomeType] = useState('coordinate');
 
   // コンポーネントがマウントされたときにトークンをチェック
   useEffect(() => {
@@ -94,7 +95,7 @@ function App() {
           <Route
             path="/home"
             element={
-              isLoggedIn ? (<HomeForUser username={username} />) : (<HomeForGuest />)
+              isLoggedIn ? (<HomeForUser username={username} type={homeType} setHomeType={setHomeType} />) : (<HomeForGuest />)
             }
           />
           {/* デフォルトはログイン画面へ */}
