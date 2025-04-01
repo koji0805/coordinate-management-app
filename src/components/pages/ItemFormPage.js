@@ -6,6 +6,7 @@ import { postImage } from "../../api/imagesAPI";
 import { CustomForm, InputText, RadioButton, Textarea, InputPhoto } from "../common/FormParts";
 import Button from "../common/Button";
 import ErrorText from "../common/ErrorText";
+import { H2 } from "../layout/Header";
 import { colorMap, getColorText } from "../../constants";
 export default function ItemFormPage({ mode }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -117,7 +118,7 @@ export default function ItemFormPage({ mode }) {
     if (itemError) return <ErrorText>{itemError}</ErrorText>
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
-            <h2 className="text-[24px] font-bold mb-[16px]">{mode === "new" ? "作成" : "編集"}</h2>
+            <H2>{mode === "new" ? "作成" : "編集"}</H2>
             <small>名前</small>
             <InputText
                 placeholder="青色の無地小紋"

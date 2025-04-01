@@ -8,6 +8,7 @@ import { getCoordinateItems, postCoordinateItems, putCoordinateItems } from "../
 import { getAllItems } from "../../api/itemsAPI";
 import { postImage } from "../../api/imagesAPI";
 import { CustomForm, InputText, Textarea, InputPhoto } from "../common/FormParts";
+import { H2 } from "../layout/Header";
 import Button, { WhiteButton } from "../common/Button";
 import ItemFilter from "../item/ItemFilter";
 import ErrorText from "../common/ErrorText";
@@ -192,7 +193,7 @@ export default function ItemForm({ mode }) {
     if (coordinateItemsError) return <div>使用アイテムエラー: {coordinateItemsError}</div>;
     return (<>
         <CustomForm className="!mt-[20px]" onSubmit={handleSubmit}>
-            <h2 className="text-[24px] font-bold mb-[16px]">{mode === "new" ? "作成" : "編集"}</h2>
+            <H2>{mode === "new" ? "作成" : "編集"}</H2>
             <small>名前</small>
             <InputText
                 placeholder="お花見に来ていった"

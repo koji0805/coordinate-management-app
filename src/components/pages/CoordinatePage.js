@@ -5,7 +5,7 @@ import { API_BASE_URL } from "../../api/client";
 import { getCoordinate, deleteCoordinate } from "../../api/coordinateAPI";
 import { getCoordinateItems, deleteCoordinateItems } from "../../api/coordinate_itemsAPI";
 import Button, { GrayButton } from "../common/Button";
-import { H3 } from "../layout/Header";
+import { H2, H3 } from "../layout/Header";
 import ItemListItem from "../list/ListItem";
 import ErrorText from "../common/ErrorText";
 
@@ -71,7 +71,7 @@ export default function Coordinate() {
                         </span>
                     </p>
             }
-            <h2 className="text-[24px] font-bold">{coordinate.name}</h2>
+            <H2 className="!mb-0">{coordinate.name}</H2>
             <p>{coordinate.day ? coordinate.day.split('T')[0] : "日付が取得できませんでした"}</p>
             <div className="">
                 <H3>使用したアイテム</H3>

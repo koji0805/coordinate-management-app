@@ -1,4 +1,8 @@
 import { CustomNavLink } from "../common/CustomLink";
+export const H2 = ({ children, className }) => {
+    return (<h3 className={`text-[24px] font-bold mb-[16px] ${className}`}>{children}</h3>)
+}
+
 export const H3 = ({ children }) => {
     return (<h3 className="text-[20px] font-bold mt-[16px]">{children}</h3>)
 }

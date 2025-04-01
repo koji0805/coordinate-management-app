@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaImage } from "react-icons/fa";
 import { API_BASE_URL } from "../../api/client";
 import { deleteItems, deleteItemfromCoordinates, getItem, getCoordinateByItem } from "../../api/itemsAPI";
-import { H3 } from "../layout/Header";
+import { H2, H3 } from "../layout/Header";
 import Button, { GrayButton } from "../common/Button";
 import ItemListItem from "../list/ListItem";
 import ErrorText from "../common/ErrorText";
@@ -90,8 +90,7 @@ export default function Items() {
                         </span>
                     </p>
             }
-            <h2 className="text-[24px] font-bold relative pl-[1.25em]
-            "><ColorMark color={item.color} />{item.name}</h2>
+            <H2 className="!mb-0 relative pl-[1.25em]"><ColorMark color={item.color} />{item.name}</H2>
             <Dl dt="カテゴリー" dd={item.category}></Dl>
             <Dl dt="メモ" dd={item.memo}></Dl>
 

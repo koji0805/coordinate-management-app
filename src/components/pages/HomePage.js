@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import List from "../list/List";
 import ErrorText from "../common/ErrorText";
 import Button from "../common/Button";
+import { H2 } from "../layout/Header";
 import ItemFilter from "../item/ItemFilter";
 import { Link } from "react-router-dom";
 import { getAllItems } from "../../api/itemsAPI";
@@ -72,7 +73,7 @@ export const HomeForUser = ({ username, type, setHomeType }) => {
 
     return (
         <div className="p-[1em] max-w-[calc(900px_+_4em)] m-auto">
-            <h2 className="text-[24px] font-bold">{username}</h2>
+            <H2>{username}</H2>
             <div className="sections">
                 <ul className="flex">
                     <li className={
