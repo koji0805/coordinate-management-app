@@ -7,10 +7,10 @@ export const API_BASE_URL = 'http://localhost:8000'; // バックエンドAPIの
 // Axiosインスタンスを作成
 const apiClient = axios.create({
     baseURL: API_BASE_URL, // ベースURLの設定
-    // headers: {
-    //     'Content-Type': 'application/json', // リクエストをJSON形式に設定
-    // },
 });
+
+let isRefreshing = false;
+let refreshPromise = null;
 
 // リクエスト時にトークンを自動的にヘッダーへ追加
 apiClient.interceptors.response.use(
@@ -24,27 +24,38 @@ apiClient.interceptors.response.use(
             localStorage.getItem('refresh_token')
         ) {
             originalRequest._retry = true;
-
-            try {
+            if (!isRefreshing) {
                 const refresh_token = localStorage.getItem('refresh_token');
-                const res = await axios.post(`${API_BASE_URL}/auth/refresh`, null, {
+                refreshPromise = axios.post(`${API_BASE_URL}/auth/refresh`, null, {
                     headers: {
                         Authorization: `Bearer ${refresh_token}`,
                     },
+                }).then((res) => {
+                    const newAccessToken = res.data.access_token;
+                    localStorage.setItem('access_token', newAccessToken);
+                    isRefreshing = false;
+                    return newAccessToken;
+                }).catch((err) => {
+                    isRefreshing = false;
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
+                    throw err;
                 });
+            }
 
-                const newAccessToken = res.data.access_token;
-                localStorage.setItem('access_token', newAccessToken);
+            isRefreshing = true;
 
-                // ヘッダーを更新してリトライ
+            try {
+                const newAccessToken = await refreshPromise;
                 originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                return apiClient(originalRequest); // 元のリクエストを再送
+                return apiClient(originalRequest);
             } catch (refreshError) {
+
                 console.error("トークンのリフレッシュに失敗しました", refreshError);
                 // 必要ならログアウト処理もここで
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
-                window.location.href = '/login';
+                // window.location.href = '/login';
             }
         }
 
@@ -52,5 +63,12 @@ apiClient.interceptors.response.use(
     }
 );
 
+apiClient.interceptors.request.use((config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+});
 
 export default apiClient;
