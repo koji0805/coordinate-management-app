@@ -117,8 +117,15 @@ export const HomeForUser = ({ username, type, setHomeType }) => {
 
 export const HomeForGuest = () => {
     return (
-        <div className="p-[1em]">
-            <p>ゲスト用TOP</p>
+        <div className="text-center pt-[40px]">
+            <div className="w-[100%] ">
+                <img className="h-[18em] inline-block m-auto" src="/images/kimonoLady.png" alt="" />
+            </div>
+            <div className="">
+                <p className="text-2xl font-bold mt-[16px]">コーディネートをメモする</p>
+                <p className="mt-[1em]">着物のお出かけ記録や、<br />どのアイテムを使ったかをメモしておけます。</p>
+                <p className="mt-[1em]">手持ちのアイテムを登録しておくことで、<br />コーディネートの振り返りがカンタンに！</p>
+            </div>
         </div>
     );
 }

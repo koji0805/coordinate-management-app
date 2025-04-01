@@ -135,6 +135,10 @@
     --text-base--line-height: calc(1.5 / 1);
     --text-xl: 1.25rem;
     --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
     --font-weight-light: 300;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
@@ -422,6 +426,9 @@
   .mt-\[4px\] {
     margin-top: 4px;
   }
+  .mt-\[8px\] {
+    margin-top: 8px;
+  }
   .mt-\[16px\] {
     margin-top: 16px;
   }
@@ -520,6 +527,12 @@
   }
   .h-\[1em\] {
     height: 1em;
+  }
+  .h-\[8em\] {
+    height: 8em;
+  }
+  .h-\[18em\] {
+    height: 18em;
   }
   .h-\[60vh\] {
     height: 60vh;
@@ -622,6 +635,9 @@
   }
   .max-w-\[10em\] {
     max-width: 10em;
+  }
+  .max-w-\[320px\] {
+    max-width: 320px;
   }
   .max-w-\[400px\] {
     max-width: 400px;
@@ -1170,6 +1186,9 @@
   .pt-\[6px\] {
     padding-top: 6px;
   }
+  .pt-\[40px\] {
+    padding-top: 40px;
+  }
   .pr-1 {
     padding-right: calc(var(--spacing) * 1);
   }
@@ -1211,6 +1230,14 @@
   }
   .align-text-top {
     vertical-align: text-top;
+  }
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
   }
   .text-base {
     font-size: var(--text-base);
