@@ -1,17 +1,12 @@
-import apiClient, { API_BASE_URL } from "./client";
+import apiClient from "./client";
 
 /**
  * アイテムの取得処理
  */
 export const getAllItems = async () => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/items`, {
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('アイテム一覧の取得に失敗しました'); // エラーハンドリング
-        const data = await response.json(); // JSON形式のデータを取得
-        return data;
+        const response = await apiClient.get(`/items`);
+        return response.data;
     } catch (err) {
         return err;
     }
@@ -21,14 +16,9 @@ export const getAllItems = async () => {
  * 指定したアイテムの取得処理
  */
 export const getItem = async (id) => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-        const data = await response.json(); // JSON形式のデータを取得
-        return data;
+        const response = await apiClient.get(`/items/${id}`);
+        return response.data;
     } catch (err) {
         return err;
     }
@@ -39,7 +29,8 @@ export const getItem = async (id) => {
  */
 export const postItem = async (data) => {
     try {
-        await apiClient.post('/items', data); // バックエンドにアカウント作成リクエストを送信
+        const response = await apiClient.post('/items', data);
+        return response.data;
     } catch (err) {
         return err;
     }
@@ -50,7 +41,8 @@ export const postItem = async (data) => {
  */
 export const putItem = async (id, data) => {
     try {
-        await apiClient.put((`/items/${id}`), data); // バックエンドにアカウント作成リクエストを送信
+        const response = await apiClient.put((`/items/${id}`), data);
+        return response.data;
     } catch (err) {
         return err;
     }
@@ -59,14 +51,10 @@ export const putItem = async (id, data) => {
 /**
  * アイテムの削除処理
  */
-export const deleteItems = async (id) => {
-    const access_token = localStorage.getItem('access_token');
+export const deleteItem = async (id) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/items/${id}`, {
-            method: 'DELETE', // HTTPメソッド
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+        await apiClient.delete(`/items/${id}`);
+        return true;
     } catch (err) {
         return err
     }
@@ -76,14 +64,9 @@ export const deleteItems = async (id) => {
  * 指定したアイテムを利用したコーディネートを取得
  */
 export const getCoordinateByItem = async (id) => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/items/${id}/coordinates`, {
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('コーディネートの取得に失敗しました'); // エラーハンドリング
-        const data = await response.json(); // JSON形式のデータを取得
-        return data;
+        const response = await apiClient.get(`/items/${id}/coordinates`);
+        return response.data;
     } catch (err) {
         return err;
     }
@@ -95,6 +78,7 @@ export const getCoordinateByItem = async (id) => {
 export const deleteItemfromCoordinates = async (id) => {
     try {
         await apiClient.delete(`/items/${id}/coordinates`);
+        return true;
     } catch (err) {
         return err
     }

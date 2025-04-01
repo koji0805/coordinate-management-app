@@ -1,25 +1,18 @@
-import apiClient, { API_BASE_URL } from "./client";
+import apiClient from "./client";
 
 /**
  * 使用したアイテムの取得処理
  */
 export const getCoordinateItems = async (id) => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('アイテムの取得に失敗しました'); // エラーハンドリング
-        const coordinateData = await response.json();
+        const response = await apiClient.get(`/coordinate_items/${id}`);
+        const coordinateData = response.data;
 
         // 各coordinate_itemのitem_idに対して個別にアイテムを取得
         const itemPromises = coordinateData.map(async (coordinate) => {
             try {
-                const itemResponse = await fetch(`${API_BASE_URL}/items/${coordinate.item_id}`, {
-                    headers: { Authorization: `Bearer ${access_token}` },
-                });
-                if (!itemResponse.ok) throw new Error(`アイテム(ID: ${coordinate.item_id})の取得に失敗しました`);
-                return await itemResponse.json();
+                const itemResponse = await apiClient.get(`/items/${coordinate.item_id}`);
+                return await itemResponse.data;
             } catch (err) {
                 return err;
             }
@@ -59,13 +52,9 @@ export const putCoordinateItems = async (id, coordinateItemsData) => {
  * 使用したアイテムの情報を削除
  */
 export const deleteCoordinateItems = async (id) => {
-    const access_token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(`${API_BASE_URL}/coordinate_items/${id}`, {
-            method: 'DELETE', // HTTPメソッド
-            headers: { Authorization: `Bearer ${access_token}` }, // トークンをヘッダーに追加
-        });
-        if (!response.ok) throw new Error('アイテムの削除に失敗しました'); // エラーハンドリング
+        await apiClient.delete(`/coordinate_items/${id}`); // エラーハンドリング
+        return true;
     } catch (err) {
         return err;
     }
