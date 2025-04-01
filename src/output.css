@@ -342,6 +342,9 @@
   .left-\[8px\] {
     left: 8px;
   }
+  .left-\[50\%\] {
+    left: 50%;
+  }
   .z-10 {
     z-index: 10;
   }
@@ -632,6 +635,10 @@
   }
   .border-collapse {
     border-collapse: collapse;
+  }
+  .translate-x-\[-50\%\] {
+    --tw-translate-x: -50%;
+    translate: var(--tw-translate-x) var(--tw-translate-y);
   }
   .translate-y-0 {
     --tw-translate-y: calc(var(--spacing) * 0);
