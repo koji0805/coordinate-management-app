@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { CustomNavLink } from "../common/CustomLink";
 export const H2 = ({ children, className }) => {
     return (<h3 className={`text-[24px] font-bold mb-[16px] ${className}`}>{children}</h3>)
@@ -27,7 +28,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
             <div className="float-right text-base">
                 {isLoggedIn ? <ItemsForUser /> : <ItemsForGuest />}
             </div>
-            <h1>着物メモ</h1>
+            <h1><Link to="/home">着物メモ</Link></h1>
         </header>
     </>);
 }
