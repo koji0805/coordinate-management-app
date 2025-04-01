@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import List from "../list/List";
 import ErrorText from "../common/ErrorText";
 import Button from "../common/Button";
+import CustomLink from "../common/CustomLink";
 import { H2 } from "../layout/Header";
 import ItemFilter from "../item/ItemFilter";
 import { Link } from "react-router-dom";
@@ -117,7 +118,7 @@ export const HomeForUser = ({ username, type, setHomeType }) => {
 
 export const HomeForGuest = () => {
     return (
-        <div className="text-center pt-[40px]">
+        <div className="text-center p-[1em] pt-[40px]">
             <div className="w-[100%] ">
                 <img className="h-[18em] inline-block m-auto" src="/images/kimonoLady.png" alt="" />
             </div>
@@ -125,6 +126,10 @@ export const HomeForGuest = () => {
                 <p className="text-2xl font-bold mt-[16px]">コーディネートをメモする</p>
                 <p className="mt-[1em]">着物のお出かけ記録や、<br />どのアイテムを使ったかをメモしておけます。</p>
                 <p className="mt-[1em]">手持ちのアイテムを登録しておくことで、<br />コーディネートの振り返りがカンタンに！</p>
+            </div>
+            <div className="max-w-[400px] m-auto mt-[1em]">
+                <Link to="/signup"><Button >新規登録する</Button></Link>
+                <p className="text-center"><CustomLink to="/login">ログインする</CustomLink></p>
             </div>
         </div>
     );
