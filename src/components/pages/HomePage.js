@@ -107,7 +107,7 @@ export const HomeForUser = ({ username, type, setHomeType }) => {
                 </section>
             </div>
 
-            <footer className="fixed bottom-[1em] block w-[calc(100%_-_4em)] max-w-[calc(900px_+_4em)] m-auto text-right left-[50%] translate-x-[-50%]">
+            <footer className="fixed bottom-[1em] block w-[calc(100%_-_2em)] max-w-[calc(900px_+_4em)] m-auto text-right left-[50%] translate-x-[-50%]">
                 <Link to={"/" + showType + "/new"}>
                     <Button>登録する</Button>
                 </Link>
