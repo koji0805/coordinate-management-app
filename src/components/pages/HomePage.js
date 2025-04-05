@@ -79,11 +79,11 @@ export const HomeForUser = ({ username, type, setHomeType }) => {
                 <ul className="flex">
                     <li className={
                         "py-[4px] px-[8px] mb-[-2px] cursor-pointer rounded-sm mr-[.5em]"
-                        + (showType === "coordinate" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
+                        + (showType === "coordinate" ? " bg-sky-600 text-white hover:opacity-50 pt-[6px]" : " border-[2px] border-sky-600 bg-white")
                     } onClick={() => { return handleShowType("coordinate") }}>コーディネート</li>
                     <li className={
                         "py-[4px] px-[8px] mb-[-2px] cursor-pointer rounded-sm"
-                        + (showType === "item" ? " border-[2px] border-sky-600 bg-white border-b-white" : " bg-sky-600 text-white hover:opacity-50 pt-[6px]")
+                        + (showType === "item" ? " bg-sky-600 text-white hover:opacity-50 pt-[6px]" : " border-[2px] border-sky-600 bg-white")
                     } onClick={() => { return handleShowType("item") }}>アイテム</li>
                 </ul>
                 <section className="pt-[1em] border-t-[2px] border-sky-600 max-h-[calc(100vh_-_15em)] overflow-y-auto min-h-[5em]">

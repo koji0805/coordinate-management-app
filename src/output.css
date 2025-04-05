@@ -122,7 +122,6 @@
     --color-gray-400: oklch(0.707 0.022 261.325);
     --color-gray-500: oklch(0.551 0.027 264.364);
     --color-gray-700: oklch(0.373 0.034 259.733);
-    --color-stone-800: oklch(0.268 0.007 34.298);
     --color-stone-950: oklch(0.147 0.004 49.25);
     --color-black: #000;
     --color-white: #fff;
@@ -137,8 +136,6 @@
     --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
-    --text-3xl: 1.875rem;
-    --text-3xl--line-height: calc(2.25 / 1.875);
     --font-weight-light: 300;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
@@ -396,9 +393,6 @@
   .my-1 {
     margin-block: calc(var(--spacing) * 1);
   }
-  .\!mt-0 {
-    margin-top: calc(var(--spacing) * 0) !important;
-  }
   .\!mt-\[20px\] {
     margin-top: 20px !important;
   }
@@ -567,9 +561,6 @@
   .min-h-\[285px\] {
     min-height: 285px;
   }
-  .\!w-\[100\%\] {
-    width: 100% !important;
-  }
   .w-1 {
     width: calc(var(--spacing) * 1);
   }
@@ -620,9 +611,6 @@
   }
   .max-w-\[400px\] {
     max-width: 400px;
-  }
-  .max-w-\[calc\(900px_\+_2em\)\] {
-    max-width: calc(900px + 2em);
   }
   .max-w-\[calc\(900px_\+_4em\)\] {
     max-width: calc(900px + 4em);
@@ -854,17 +842,11 @@
   .border-sky-600 {
     border-color: var(--color-sky-600);
   }
-  .border-slate-50 {
-    border-color: var(--color-slate-50);
-  }
   .border-slate-200 {
     border-color: var(--color-slate-200);
   }
   .border-slate-400 {
     border-color: var(--color-slate-400);
-  }
-  .border-slate-500 {
-    border-color: var(--color-slate-500);
   }
   .border-teal-500 {
     border-color: var(--color-teal-500);
@@ -1049,9 +1031,6 @@
   .bg-slate-800\/40 {
     background-color: color-mix(in oklab, var(--color-slate-800) 40%, transparent);
   }
-  .bg-stone-800 {
-    background-color: var(--color-stone-800);
-  }
   .bg-stone-950 {
     background-color: var(--color-stone-950);
   }
@@ -1221,10 +1200,6 @@
     font-size: var(--text-2xl);
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
-  .text-3xl {
-    font-size: var(--text-3xl);
-    line-height: var(--tw-leading, var(--text-3xl--line-height));
-  }
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -1383,9 +1358,6 @@
   }
   .text-slate-50 {
     color: var(--color-slate-50);
-  }
-  .text-slate-200 {
-    color: var(--color-slate-200);
   }
   .text-slate-400 {
     color: var(--color-slate-400);
