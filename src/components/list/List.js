@@ -1,5 +1,19 @@
 import ListItem from "../list/ListItem"
 export default function List({ items, directory, itemType }) {
+    let listItems = items;
+    if (itemType === "コーディネート") {
+        listItems.sort(function (a, b) {
+            if (a.day < b.day) return 1;
+            if (a.day > b.day) return -1;
+            return 0;
+        });
+    } else { // アイテム
+        listItems.sort(function (a, b) {
+            if (a.updated_at < b.updated_at) return 1;
+            if (a.updated_at > b.updated_at) return -1;
+            return 0;
+        });
+    }
     return (<>
         <ul className="">
             {
