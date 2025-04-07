@@ -11,10 +11,12 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 # Copy the rest of your application files
-COPY . .
+COPY build ./build
+
+RUN yarn global add serve
 
 # Expose the port your app runs on
 EXPOSE 3000
 
 # Define the command to run your app
-CMD ["yarn", "start"]
+CMD ["serve", "-s", "build", "-l", "3000"]

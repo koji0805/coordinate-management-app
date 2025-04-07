@@ -5,7 +5,7 @@ import axios from 'axios';
 const backendHost =
     window.location.hostname === "localhost"
         ? "http://localhost:8000"
-        : "http://192.168.11.2:8000";
+        : "http://54.199.172.106:8000";
 
 export const API_BASE_URL = backendHost;
 
