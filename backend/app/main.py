@@ -28,6 +28,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# デバッグ用のエンドポイント
+@app.get("/debug-test")
+async def debug_test():
+    # ここでブレークポイントをテストできます
+    test_var = "デバッグテスト"
+    return {"message": test_var}
+
 # ルーターを追加
 app.include_router(auth.router)
 app.include_router(items.router)
@@ -37,3 +44,8 @@ app.include_router(images.router)
 
 # # 静的ファイル（画像など）の公開設定
 app.mount("/images", StaticFiles(directory="upload"), name="images")
+
+if __name__ == "__main__":
+    import uvicorn
+    # デバッグモードで実行する場合の設定
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
